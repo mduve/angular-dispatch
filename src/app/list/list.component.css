@@ -1,0 +1,12 @@
+agm-map {
+  height: 300px;
+  width: 100%;
+}
+
+.selected {
+	background-color: #cecece;
+}
+
+.btn {
+	margin-top:15px;
+}
