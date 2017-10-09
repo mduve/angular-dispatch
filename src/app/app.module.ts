@@ -11,6 +11,9 @@ import { ReviewComponent } from './review/review.component';
 import { routes } from './app.routes';
 import { AgmCoreModule } from '@agm/core';
 import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng2-dragula';
+import { SelectBranchComponent } from './select-branch/select-branch.component';
+import { MapComponent } from './map/map.component';
+import { StocksService } from './stocks.service';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,8 @@ import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng
     HeaderComponent,
     ListComponent,
     ReviewComponent,
+    SelectBranchComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +36,8 @@ import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng
     BrowserAnimationsModule,
   ],
   providers: [
-    DragulaService
+    DragulaService,
+    StocksService
   ],
   bootstrap: [AppComponent]
 })

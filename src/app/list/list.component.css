@@ -3,6 +3,10 @@ agm-map {
   width: 100%;
 }
 
+.col-xs-6 {width:50%;}
+.col-xs-12 {width:100%;}
+
+
 .selected {
 	background-color: #cecece;
 }

@@ -1,29 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { StocksService } from '../stocks.service';
 
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css', '../../.././node_modules/dragula/dist/dragula.css'],
-  providers: [StocksService]
-
 })
 
 export class ListComponent implements OnInit  {
 
-  // .. service
-  // constructor(private _stocksService: StocksService) {}
-  // ngOnInit() {this.title = this._stocksService.SomeMethod();}  
-
-  ngOnInit() {}
-
-  //need to move to service
-  markers = [
-    { branch: 'charlotte', number: 'stock-0123455-charlotte', due_date: '09/20/2017 12:04 PM', loss_type: 'collision', status: 'Wait Dispatch', pickup_location: 'Kelley McNight Wrecker Service', zip_code: '76011', county: 'Tarrant', city: 'Arlington', state: 'TX', model_year: 2003, model_make: 'Dodge', model_name: 'RAM 1500', priority: 'V', salvage_provider: 'State Farm Insurance', lat: 41.679570, lng: -88.365600, draggable: false, selectable: false },
-    { branch: 'charlotte', number: 'stock-0123456-charlotte', due_date: '09/20/2017 12:04 PM', loss_type: 'collision', status: 'Wait Dispatch', pickup_location: 'Kelley McNight Wrecker Service', zip_code: '76011', county: 'Tarrant', city: 'Arlington', state: 'TX', model_year: 2003, model_make: 'Dodge', model_name: 'RAM 1500', priority: 'V', salvage_provider: 'State Farm Insurance', lat: 42.620576, lng: -89.168607, draggable: false, selectable: false },
-    { branch: 'chicago', number: 'stock-0123457-chicago', lat: 45.669576, lng: -87.265607, draggable: false, selectable: false },
-    { branch: 'dallas', number: 'stock-0123458-dallas', lat: 40.679576, lng: -90.365607, draggable: false, selectable: false }
-  ];
+  markers;
+  constructor(private stocksService: StocksService) {}
+  ngOnInit() {
+     this.markers = this.stocksService.get();
+   }  
 
 
   // need to select branches
