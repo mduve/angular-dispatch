@@ -9,6 +9,24 @@ header {
 	margin-bottom: 15px;
 }
 
+
+agm-map {
+  height: 300px;
+  width: 100%;
+}
+
 .container-fluid .row{
 	padding: 15px;
+}
+
+.col-xs-6 {width:50%;}
+.col-xs-12 {width:100%;}
+
+
+.selected {
+	background-color: #cecece;
+}
+
+.btn {
+	margin-top:15px;
 }

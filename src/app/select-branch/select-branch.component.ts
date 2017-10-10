@@ -1,47 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { StocksService } from '../stocks.service';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-select-branch',
-  templateUrl: './select-branch.component.html',
-  styleUrls: ['./select-branch.component.css']
+  styleUrls: ['./select-branch.component.css'],
+  template: `
+  <select class="form-control" (change)="onSelectChange($event)">
+      <option value="">--- Select ---</option>
+      <option value="Charlotte">Charlotte</option>
+      <option value="Chicago">Chicago</option>
+      <option value="Dallas">Dallas</option>
+  </select>  
+  `
 })
-export class SelectBranchComponent implements OnInit {
+export class SelectBranchComponent {
 
-  //service
-  markers;
-  constructor(private stocksService: StocksService) {}
-  ngOnInit() {
-     this.markers = this.stocksService.get();
-   }  
+  constructor() {}
+  ngOnInit() {}  
 
-
-  // need to select branches
-  changeFilterData:any[] = [];
-
+  //event emitter
+  @Output() select = new EventEmitter();
 
   onSelectChange(event){
     let selectedValue = event.target.value;
     
-    // You can implement filtering logic depending on the selectedValue
-    if(selectedValue == 'Charlotte'){
-      this.changeFilterData = this.markers.slice(0, 2);
-    }else if(selectedValue == 'Chicago'){
-      this.changeFilterData =  this.markers.slice(2, 3);
-    }else if(selectedValue == 'Dallas'){
-      this.changeFilterData =  this.markers.slice(3, 4);
-    }else{
-      this.changeFilterData =  [];
-    }
+    this.select.emit(selectedValue);
 
-    this.markers.forEach(function(marker){
-      // need to reset selectable to false
-      if (marker.selectable) {
-        marker.selectable = false;
-      }
-    });
-
-  }
-
+    // need to reset selectable to false
+    // this.markers.forEach(function(marker){
+    //   if (marker.selectable) {
+    //     marker.selectable = false;
+    //   }
+    // });
+  } 
 
 }
