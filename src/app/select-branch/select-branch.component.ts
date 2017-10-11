@@ -2,15 +2,8 @@ import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-select-branch',
+  templateUrl: './select-branch.component.html',
   styleUrls: ['./select-branch.component.css'],
-  template: `
-  <select class="form-control" (change)="onSelectChange($event)">
-      <option value="">--- Select ---</option>
-      <option value="Charlotte">Charlotte</option>
-      <option value="Chicago">Chicago</option>
-      <option value="Dallas">Dallas</option>
-  </select>  
-  `
 })
 export class SelectBranchComponent {
 

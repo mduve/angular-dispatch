@@ -1,36 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { StocksService } from '../stocks.service';
 
 @Component({
   selector: 'app-map',
-  //templateUrl: './map.component.html',
-  template: `
-  <agm-map 
-    [latitude]="lat" 
-    [longitude]="lng"
-    [zoom]="zoom"
-    [disableDefaultUI]=false
-    [zoomControl]="false"
-    [styles]="styles">
-    <agm-marker 
-      *ngFor="let m of markersFiltered; let i = index"
-      (markerClick)="clickedMarker(m, i)"
-      [latitude]="m.lat" 
-      [longitude]="m.lng"
-      [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  >
-      </agm-marker>
-  </agm-map>
-  `,
+  templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
 })
-export class MapComponent {
+export class MapComponent implements OnChanges {
 
   //service
   markers;
   constructor(private stocksService: StocksService) {}
   ngOnInit() {this.markers = this.stocksService.get();}  
-
-  @Input() branch: string;
 
   // initialize title, zoom, start position and styles
   zoom: number = 5;
@@ -46,28 +27,27 @@ export class MapComponent {
     }
   }
 
-
-  // need to select branches
+  // selected branch stocks
   markersFiltered:any[] = [];
+  @Input() branch:string;
 
-  // onSelectChange(event){
-  //   let selectedValue = event.target.value;
-  //   if(selectedValue == 'Charlotte'){
-  //     this.markersFiltered = this.markers.slice(0, 2);
-  //   }else if(selectedValue == 'Chicago'){
-  //     this.markersFiltered =  this.markers.slice(2, 3);
-  //   }else if(selectedValue == 'Dallas'){
-  //     this.markersFiltered =  this.markers.slice(3, 4);
-  //   }else{
-  //     this.markersFiltered =  [];
-  //   }
-  //   this.markers.forEach(function(marker){
-  //     if (marker.selectable) {
-  //       marker.selectable = false;
-  //     }
-  //   });
-  // }  
+  ngOnChanges() {
+  
+      if ( this.branch === 'Charlotte' ) {
+        this.markersFiltered = this.markers.slice(0, 2);
+      } else if ( this.branch === 'Chicago'){
+        this.markersFiltered =  this.markers.slice(2, 3);
+      } else if ( this.branch === 'Dallas'){
+        this.markersFiltered =  this.markers.slice(3, 4);
+      } else {
+        this.markersFiltered =  [];
+      }
 
+      if ( this.branch ) {
+        this.markers.forEach(function(marker){marker.selectable = false;});
+      }
+      
+  }
 }
 
 interface marker {

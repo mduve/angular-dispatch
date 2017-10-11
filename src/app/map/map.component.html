@@ -15,3 +15,20 @@
 		</agm-marker>
 
 </agm-map> -->
+
+  <!-- <h4>{{branch}}</h4><br><br> -->
+  <agm-map 
+    [latitude]="lat" 
+    [longitude]="lng"
+    [zoom]="zoom"
+    [disableDefaultUI]=false
+    [zoomControl]="false"
+    [styles]="styles">
+    <agm-marker 
+      *ngFor="let m of markersFiltered; let i = index"
+      (markerClick)="clickedMarker(m, i)"
+      [latitude]="m.lat" 
+      [longitude]="m.lng"
+      [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  >
+      </agm-marker>
+  </agm-map>
