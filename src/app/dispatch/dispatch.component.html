@@ -1,8 +1,11 @@
 <div class="container-fluid">
 	<div class="row">				
-		<div class="col-xs-12"><h5>Dispatch <p class="float-right">stock counter</p></h5></div>
-		<div class="col-xs-6"><app-select-branch (select)="selectBranch($event)"></app-select-branch></div>
-		<div class="col-xs-6"><app-map [branch]="selectedBranch"></app-map></div>
-
+		<div class="col-xs-12"><h5>Dispatch <app-stock-counter></app-stock-counter></h5></div>
+		<div class="col-xs-12">
+			<app-select-branch (select)="selectBranch($event)"></app-select-branch>
+		</div>
+	</div>
+	<div class="row">
+		<app-map [branch]="selectedBranch"  (stockCount)="CountStock($event)" style="width:100%;"></app-map>
 	</div>
 </div>

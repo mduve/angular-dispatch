@@ -18,12 +18,6 @@ export class SelectBranchComponent {
     
     this.select.emit(selectedValue);
 
-    // need to reset selectable to false
-    // this.markers.forEach(function(marker){
-    //   if (marker.selectable) {
-    //     marker.selectable = false;
-    //   }
-    // });
   } 
 
 }

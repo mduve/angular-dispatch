@@ -1,22 +1,15 @@
-<!-- <agm-map 
-	[latitude]="lat" 
-	[longitude]="lng"
-	[zoom]="zoom"
-	[disableDefaultUI]=false
-	[zoomControl]="false"
-	[styles]="styles">
-
-	<agm-marker 
-		*ngFor="let m of markers; let i = index"
-		(markerClick)="clickedMarker(m, i)"
-		[latitude]="m.lat" 
-		[longitude]="m.lng"
-		[iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  >
-		</agm-marker>
-
-</agm-map> -->
-
-  <!-- <h4>{{branch}}</h4><br><br> -->
+<div class="col-xs-6">
+  <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
+    <li 
+      *ngFor="let m of markersFiltered; let i = index" 
+      (click)="clickedMarker(m, i);" 
+      [ngClass]="m.selectable ? 'selected' : 'unselected'">
+        ({{i + 1}})  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}, selected: {{ m.selectable }}
+    </li>
+  </ol>
+  <button id="review" type="button" class="btn btn-success" [disabled]="buttonState()">Review</button>
+</div>
+<div class="col-xs-6">
   <agm-map 
     [latitude]="lat" 
     [longitude]="lng"
@@ -32,3 +25,4 @@
       [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  >
       </agm-marker>
   </agm-map>
+</div>

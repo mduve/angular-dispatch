@@ -11,7 +11,7 @@ export class DispatchComponent implements OnInit {
   ngOnInit() {}
 
   selectedBranch;
-  selectBranch(data){this.selectedBranch = data;}
 
+  selectBranch(data){this.selectedBranch = data;}
 
 }

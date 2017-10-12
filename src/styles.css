@@ -19,8 +19,8 @@ agm-map {
 	padding: 15px;
 }
 
-.col-xs-6 {width:50%;}
-.col-xs-12 {width:100%;}
+.col-xs-6 {width:50%;display: inline-block;float: left;}
+.col-xs-12 {width:100%;display: inline-block;float: left;}
 
 
 .selected {
