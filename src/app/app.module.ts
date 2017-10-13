@@ -11,7 +11,6 @@ import { SelectBranchComponent } from './select-branch/select-branch.component';
 import { StockCounterComponent } from './stock-counter/stock-counter.component';
 import { MapComponent } from './map/map.component';
 import { routes } from './app.routes';
-import { ListComponent } from './list/list.component';
 import { StocksService } from './stocks.service';
 import { AgmCoreModule } from '@agm/core';
 import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng2-dragula';
@@ -21,9 +20,8 @@ import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng
     AppComponent,
     HeaderComponent,
     DispatchComponent,
-    ListComponent,
-    SelectBranchComponent,
     MapComponent,
+    SelectBranchComponent,
     StockCounterComponent,
   ],
   imports: [

@@ -68,6 +68,16 @@ export class MapComponent implements OnChanges {
       }
       
   }
+
+  @Output() onStockCount = new EventEmitter();
+  countStock(){
+    let countedStocks = 0;
+    this.markers.forEach(function(marker){
+      countedStocks += marker.selectable ? 1 : 0;
+    });
+    this.onStockCount.emit(countedStocks); 
+  }
+
 }
 
 interface marker {

@@ -15,9 +15,7 @@ export class SelectBranchComponent {
 
   onSelectChange(event){
     let selectedValue = event.target.value;
-    
     this.select.emit(selectedValue);
-
   } 
 
 }

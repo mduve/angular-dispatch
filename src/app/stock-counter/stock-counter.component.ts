@@ -7,7 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class StockCounterComponent implements OnInit {
 
+
   constructor() { }
   ngOnInit() {}
+
+  @Input() stockCount:number;
 
 }

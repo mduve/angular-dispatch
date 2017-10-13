@@ -2,7 +2,7 @@
   <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
     <li 
       *ngFor="let m of markersFiltered; let i = index" 
-      (click)="clickedMarker(m, i);" 
+      (click)="clickedMarker(m, i);countStock();"
       [ngClass]="m.selectable ? 'selected' : 'unselected'">
         ({{i + 1}})  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}, selected: {{ m.selectable }}
     </li>
@@ -19,7 +19,7 @@
     [styles]="styles">
     <agm-marker 
       *ngFor="let m of markersFiltered; let i = index"
-      (markerClick)="clickedMarker(m, i)"
+      (markerClick)="clickedMarker(m, i);countStock();"
       [latitude]="m.lat" 
       [longitude]="m.lng"
       [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  >
