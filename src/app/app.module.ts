@@ -14,6 +14,7 @@ import { routes } from './app.routes';
 import { StocksService } from './stocks.service';
 import { AgmCoreModule } from '@agm/core';
 import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng2-dragula';
+import { MatButtonModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng
     routes,
     DragulaModule,
     BrowserAnimationsModule,
+    MatButtonModule,
   ],
   providers: [
     DragulaService,
@@ -41,6 +43,4 @@ import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng
   ],
   bootstrap: [AppComponent]
 })
-
-
 export class AppModule { }
