@@ -18,7 +18,9 @@ export class MapComponent implements OnChanges {
 
   //service
   constructor(private stocksService: StocksService) {}
-  ngOnInit() {this.markers = this.stocksService.get();}  
+  ngOnInit() {
+    this.markers = this.stocksService.get();  
+  }  
 
   buttonState(){
       var count = 0;
@@ -69,6 +71,31 @@ export class MapComponent implements OnChanges {
       
   }
 
+  onSelectChange(event){
+    let selectedValue = event.target.value;
+    if ( selectedValue === 'Charlotte' ) {
+      this.markersFiltered = this.markers.slice(0, 3);
+      this.zoom = 10;
+      this.lat = 35.227085;
+      this.lng = -80.843124;          
+    } else if ( selectedValue === 'Chicago'){
+      this.markersFiltered =  this.markers.slice(3, 6);
+      this.zoom = 10;
+      this.lat = 41.881832;
+      this.lng = -87.623177;
+    } else if ( selectedValue === 'Dallas'){
+      this.markersFiltered =  this.markers.slice(6, 9);
+      this.zoom = 10;
+      this.lat = 32.7767;
+      this.lng = -96.7970;
+    } else {
+      this.markersFiltered =  [];
+    }
+    if ( selectedValue ) {
+      this.markers.forEach(function(marker){marker.selectable = false;});
+    }
+  } 
+
   @Output() onStockCount = new EventEmitter();
   countStock(){
     let countedStocks = 0;
@@ -77,7 +104,7 @@ export class MapComponent implements OnChanges {
     });
     this.onStockCount.emit(countedStocks); 
   }
-
+ 
 }
 
 interface marker {

@@ -1,14 +1,52 @@
 <div class="col-xs-6">
-  <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
-    <li 
-      *ngFor="let m of markersFiltered; let i = index" 
-      (click)="clickedMarker(m, i);countStock();"
-      [ngClass]="m.selectable ? 'selected' : 'unselected'">
-        ({{i + 1}})  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}, selected: {{ m.selectable }}
-    </li>
-  </ol>
-  <button mat-raised-button>Basic</button>
-  <button id="review" type="button" class="btn btn-success" [disabled]="buttonState()">Review</button>
+  <mat-horizontal-stepper [linear]="isLinear">
+    <mat-step [stepControl]="firstFormGroup">
+      <ng-template matStepLabel>Select Stocks</ng-template>
+      <select class="form-control" (change)="onSelectChange($event)">
+        <option value="">--- Select ---</option>
+        <option value="Charlotte">Charlotte</option>
+        <option value="Chicago">Chicago</option>
+        <option value="Dallas">Dallas</option>
+      </select> 
+      <ol class="stocks" style="list-style-type:none;">
+        <li 
+          *ngFor="let m of markersFiltered; let i = index" 
+          (click)="clickedMarker(m, i);countStock();"
+          [ngClass]="m.selectable ? 'selected' : 'unselected'">
+            <!-- ({{i + 1}}) -->  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}, selected: {{ m.selectable }}
+        </li>
+      </ol>
+      <div>
+        <button id="review" mat-button matStepperNext [disabled]="buttonState()">Next</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <ng-template matStepLabel>Select Route</ng-template>
+        <p><strong>Start</strong> 1919 Branch Drive, Chicago IL, 60440</p>
+        <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many' type="A">
+          <ng-container *ngFor="let m of markersFiltered; let i = index">
+            <li *ngIf="(m.selectable == true)">
+              <!-- ({{i + 1}}) -->  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}
+            </li>
+          </ng-container>
+        </ol>
+        <p><strong>Finish</strong> 1919 Branch Drive, Chicago IL, 60440</p>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Review</ng-template>
+         <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
+          <ng-container *ngFor="let m of markersFiltered; let i = index">
+            <li *ngIf="(m.selectable == true)">
+              ({{i + 1}})  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}
+            </li>
+          </ng-container>
+        </ol>
+    </mat-step>
+  </mat-horizontal-stepper>
 </div>
 <div class="col-xs-6">
   <agm-map 
