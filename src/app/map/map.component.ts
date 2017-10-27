@@ -1,4 +1,3 @@
-// import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { StocksService } from '../stocks.service';
 
@@ -89,9 +88,7 @@ export class MapComponent {
 
   //service
   constructor(private stocksService: StocksService) {}
-  ngOnInit() {
-    this.markers = this.stocksService.get();  
-  }  
+  ngOnInit() {this.markers = this.stocksService.get()}  
 
 
   clickedMarker(marker:marker, index:number){
