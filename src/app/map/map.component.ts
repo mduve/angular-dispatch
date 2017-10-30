@@ -3,77 +3,17 @@ import { StocksService } from '../stocks.service';
 
 @Component({
   selector: 'app-map',
-  //templateUrl: './map.component.html',
-  template: `
-  <div class="col-xs-6">
-    <mat-horizontal-stepper [linear]="isLinear">
-      <mat-step [stepControl]="firstFormGroup">
-        <ng-template matStepLabel>Select Stocks</ng-template>
-        <select id="branchSelector" class="form-control pull-left" (change)="onSelectChange($event)">
-          <option value="">--- Select ---</option>
-          <option *ngFor="let b of markers; let i = index" [value]="i">{{ b.branch.name }}</option>
-        </select> 
-        <p><strong>{{ branchName }}</strong> {{ branchAddress }}, stock counter  <span class="badge badge-secondary">{{ count }}</span></p>
-        <ol class="stocks" style="list-style-type:none;">
-          <li 
-            *ngFor="let m of markersFiltered; let i = index" 
-            (click)="clickedMarker(m, i);" 
-            [ngClass]="m.selectable ? 'selected' : 'unselected'">
-              {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}, selected: {{ m.selectable }}
-          </li>
-        </ol>
-        <div>
-          <button id="review" mat-button matStepperNext [disabled]="buttonState()">Next</button>
-        </div>
-      </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
-        <ng-template matStepLabel>Select Route</ng-template>
-
-        <p><strong>Start</strong> {{ branchAddress }}</p>
-        <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many' type="A">
-          <ng-container *ngFor="let m of markersFiltered; let i = index">
-            <li *ngIf="(m.selectable == true)">
-              <!-- ({{i + 1}}) -->  {{m.number}}, lat: {{m.lat}}, long: {{m.lng}}
-            </li>
-          </ng-container>
-        </ol>
-        <p><strong>Finish</strong> {{ branchAddress }}</p>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-      </div>
-
-      </mat-step> 
-      <mat-step><ng-template matStepLabel>Review</ng-template></mat-step>
-    </mat-horizontal-stepper>
-  </div>
-  <div class="col-xs-6">
-    <agm-map 
-      [latitude]="lat" 
-      [longitude]="lng"
-      [zoom]="zoom"
-      [disableDefaultUI]=false
-      [zoomControl]="false"
-      [styles]="styles">
-      <agm-marker 
-        *ngFor="let m of markersFiltered; let i = index" 
-        (markerClick)="clickedMarker(m, i);" 
-        [latitude]="m.lat" 
-        [longitude]="m.lng" 
-        [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  
-        >
-      </agm-marker>
-
-      <agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.png'"></agm-marker>
-
-    </agm-map>
-  </div>
-  `,
+  templateUrl: './map.component.html',
   styleUrls: ['./map.component.css', '../../.././node_modules/dragula/dist/dragula.css'],
 })
 
 export class MapComponent {
 
+  //service
+  constructor(private stocksService: StocksService) {}
+  ngOnInit() {this.markers = this.stocksService.get()}
+
+  selectedBranch:string = '';
   zoom: number = 4;
   lat: number = 40;
   lng: number = -100;  
@@ -85,10 +25,6 @@ export class MapComponent {
   branchName: string;
   branchLat: number;
   branchLng: number;  
-
-  //service
-  constructor(private stocksService: StocksService) {}
-  ngOnInit() {this.markers = this.stocksService.get()}  
 
 
   clickedMarker(marker:marker, index:number){
@@ -110,10 +46,8 @@ export class MapComponent {
 
   // selected branch stocks
   markersFiltered:any[] = [];
-
   onSelectChange(event){
-    let selectedValue = event.target.value;
-
+    let selectedValue = this.selectedBranch;
     this.branchName = this.markers[selectedValue].branch.name;
     this.branchAddress = this.markers[selectedValue].branch.address;
     this.branchLat = this.markers[selectedValue].branch.lat;
@@ -122,12 +56,8 @@ export class MapComponent {
     this.lng = this.markers[selectedValue].branch.lng;
     this.zoom = this.markers[selectedValue].branch.zoom;
     this.markersFiltered = this.markers[selectedValue]["stocks"];
-
-
     this.markers[selectedValue]["stocks"].forEach(function(marker){marker.selectable = false;});
     this.count = 0;
-
-    
   }   
 
 }

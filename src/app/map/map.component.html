@@ -2,10 +2,16 @@
     <mat-horizontal-stepper [linear]="isLinear">
       <mat-step [stepControl]="firstFormGroup">
         <ng-template matStepLabel>Select Stocks</ng-template>
-        <select id="branchSelector" class="form-control pull-left" (change)="onSelectChange($event)">
-          <option value="">--- Select ---</option>
-          <option *ngFor="let b of markers; let i = index" [value]="i">{{ b.branch.name }}</option>
-        </select> 
+
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-select placeholder="Pick a Branch" [(ngModel)]="selectedBranch" name="branch" (change)="onSelectChange($event)">
+              <mat-option *ngFor="let marker of markers; let i = index" [value]="i"> {{ marker.branch.name }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+
+
         <p><strong>{{ branchName }}</strong> {{ branchAddress }}, stock counter  <span class="badge badge-secondary">{{ count }}</span></p>
         <ol class="stocks" style="list-style-type:none;">
           <li 
