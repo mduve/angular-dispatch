@@ -5,12 +5,14 @@
 
         <form class="example-form">
           <mat-form-field class="example-full-width">
-            <mat-select placeholder="Pick a Branch" [(ngModel)]="selectedBranch" name="branch" (change)="onSelectChange($event)">
-              <mat-option *ngFor="let marker of markers; let i = index" [value]="i"> {{ marker.branch.name }} </mat-option>
-            </mat-select>
+            <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
+              <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
+                  {{ marker.branch.name }} 
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
         </form>
-
 
         <p><strong>{{ branchName }}</strong> {{ branchAddress }}, stock counter  <span class="badge badge-secondary">{{ count }}</span></p>
         <ol class="stocks" style="list-style-type:none;">
