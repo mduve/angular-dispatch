@@ -11,9 +11,14 @@ header {
 	margin-bottom: 15px;
 }
 
+ol {
+    padding: 0;
+    max-height: 13rem;
+    overflow: auto;
+}
 
 agm-map {
-  height: 300px;
+  height: 375px;
   width: 100%;
 }
 
@@ -37,6 +42,12 @@ agm-map {
 	margin: 0 0 1rem 0;
 }
 
+.mat-tab-body-content {
+	padding: 2rem 2rem 2rem 0;
+}
 
-.example-form {min-width: 150px;max-width: 500px;width: 100%;margin: 75px 0;}
-.example-full-width {width: 100%;}
+.mat-form-field {
+    width: 100%;
+}
+
+.stocks li {border-bottom: 1px solid #cecece;margin: .5rem 0;}
