@@ -29,11 +29,6 @@ agm-map {
 .col-xs-6 {width:50%;display: inline-block;float: left;}
 .col-xs-12 {width:100%;display: inline-block;float: left;}
 
-
-.selected {
-	background-color: #cecece;
-}
-
 .btn {
 	margin-top:15px;
 }
@@ -48,6 +43,7 @@ agm-map {
 
 .mat-form-field {
     width: 100%;
+    max-width: 10rem;
 }
 
 .stocks li {border-bottom: 1px solid #cecece;margin: .5rem 0;}

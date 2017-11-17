@@ -1,147 +1,16 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { StocksService } from '../stocks.service';
 
-import { FormControl } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
   selector: 'app-map',
-  // templateUrl: './map.component.html',
-  template: `
-    <mat-horizontal-stepper [linear]="isLinear">
-      <mat-step [stepControl]="firstFormGroup">
-        <ng-template matStepLabel>Select &amp; Route Stocks</ng-template>
-
-        <form [formGroup]="firstFormGroup">
-
-          <div class="col-xs-6">
-              <mat-tab-group>
-                <mat-tab label="Select Stocks">
-
-                  <mat-form-field>
-                    <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
-                      <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
-                          {{ marker.branch.name }} 
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-
-                  <!-- orig
-                  <ol class="stocks" style="list-style-type:none;">
-                    <li *ngFor="let m of markersFiltered; let i = index" (click)="clickedMarker(m, i);" [ngClass]="m.selectable ? 'selected' : 'unselected'" >
-                        <mat-checkbox></mat-checkbox> ({{i + 1}}) <a href="">{{ m.number }}</a> {{ m.due_date }}, {{ m.number }}, {{ m.loss_type }}, {{ m.status }}, {{ m.pickup_location }}, {{ m.zip_code }}, {{ m.county }}, {{ m.city }}, {{ m.state }}, {{ m.model_year }}, {{ m.model_make }}, {{ m.model_name }}, {{ m.priority }}, {{ m.salvage_provider }} 
-                    </li>
-                  </ol> -->
-
-                  <ol class="stocks">
-                    <li *ngFor="let m of markersFiltered; let i = index" >
-                        <mat-checkbox (check)="checkedMarker()"></mat-checkbox> <a href="">{{ m.number }}</a> {{ m.due_date }}, {{ m.number }}, {{ m.loss_type }}, {{ m.status }}, {{ m.pickup_location }}, {{ m.zip_code }}, {{ m.county }}, {{ m.city }}, {{ m.state }}, {{ m.model_year }}, {{ m.model_make }}, {{ m.model_name }}, {{ m.priority }}, {{ m.salvage_provider }} 
-                    </li>
-                  </ol>  
-
-                  <!-- <p><strong>{{ branchName }}</strong> <span class="badge badge-secondary">{{ count }}</span></p> -->
-                  <!-- <mat-form-field><input matInput placeholder="Last name, First name" formControlName="firstCtrl" required></mat-form-field> -->
-                  <mat-checkbox formControlName="firstCtrl" required>Validate the first step</mat-checkbox>
-
-                </mat-tab>
-                <mat-tab label="Route Stocks">
-                  <p><strong>Start</strong> {{ branchAddress }}</p>
-                  <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
-                    <ng-container *ngFor="let m of markersFiltered; let i = index">
-                      <li *ngIf="(m.selectable == true)">
-                        <!-- ({{i + 1}}) -->  
-                        <a href="">{{m.number}}</a> 
-                        {{m.stock_address}}, {{m.model_year}}, {{m.model_make}}, {{m.model_name}}, {{m.provider_name}}, {{m.towable}}, {{m.tower}}, {{m.damage}}, {{m.status}} 
-                      </li>
-                    </ng-container>
-                  </ol>
-                  <p><strong>Finish</strong> {{ branchAddress }}</p>
-                </mat-tab>
-              </mat-tab-group>
-          </div>
-          <div class="col-xs-6">
-              <agm-map 
-                [latitude]="lat" 
-                [longitude]="lng"
-                [zoom]="zoom"
-                [disableDefaultUI]=false
-                [zoomControl]="true"
-                [styles]="styles">
-
-                <agm-marker 
-                  *ngFor="let m of markersFiltered; let i = index" 
-                  (markerClick)="clickedMarker(m, i);" 
-                  [latitude]="m.lat" 
-                  [longitude]="m.lng" 
-                  [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  
-                  >
-                </agm-marker>
-
-                <agm-marker 
-                  [latitude]="branchLat" 
-                  [longitude]="branchLng" 
-                  [iconUrl]="'../assets/branch.png'">
-                </agm-marker>
-
-                 <agm-circle 
-                  [latitude]="branchLat" 
-                  [longitude]="branchLng" 
-                  [radius]="50000"
-                  [fillColor]="'red'"
-                  [circleDraggable]="false"
-                  [editable]="false">
-                </agm-circle>
-
-              </agm-map>
-          </div>
-
-          <div class="col-xs-12">
-            <!-- <button id="review" mat-button matStepperNext [disabled]="buttonState()">Next</button> -->
-            <button mat-button matStepperNext>Next</button>
-          </div>
-        </form>
-      </mat-step>
-
-      <mat-step>
-        <ng-template matStepLabel>Review</ng-template>
-        <div class="col-xs-12">
-          <ol class="stocks">
-            <ng-container *ngFor="let m of markersFiltered; let i = index">
-              <li *ngIf="(m.selectable == true)">
-                <!-- ({{i + 1}}) -->  
-                <a href="">{{m.number}}</a>  
-                {{m.storage_end}} 
-                {{m.total_payment_amount}} 
-                {{m.total_hauling_amount}} 
-                {{m.payment_type}} 
-                {{m.checks_payable_to}} 
-                {{m.dispatch_note}} 
-                {{m.destination}} 
-                {{m.tow_zone}} 
-                {{m.mileage}} 
-                {{m.tow_type}}
-   
-              </li>
-            </ng-container>
-          </ol>
-        </div>
-        <div class="col-xs-12">
-          <button disabled>Cancel Dispatch</button>
-          <button disabled>logout Tower</button>
-          <button disabled>Dispatch</button>
-        </div>
-  
-      </mat-step>
-
-    </mat-horizontal-stepper>
-
-  `,
+  templateUrl: './map.component.html',
   styleUrls: ['./map.component.css', '../../.././node_modules/dragula/dist/dragula.css'],
 })
 
@@ -167,8 +36,8 @@ export class MapComponent {
   selectedBranch:string = '';
 
   isLinear = true;
-  isCompleted = false;
   firstFormGroup: FormGroup;
+
 
   constructor(private stocksService: StocksService, private _formBuilder: FormBuilder) {}
 
@@ -180,33 +49,19 @@ export class MapComponent {
       .map(val => val ? this.filter(val) : this.markers.slice());
 
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
+      firstCtrl: this._formBuilder.array([])}, 
+      { validator:this.checkIfChecked }
+    );
   }
 
   clickedMarker(marker:marker, index:number){
+
     if (marker.selectable) {
       marker.selectable = false;
     } else {
       marker.selectable = true;
     }
     this.count += marker.selectable ? 1 : -1;    
-
-    if(this.count > 0){
-      //alert('more than 1');
-      //form completed
-      this.isCompleted = true;
-
-    } else {
-      //alert('0');
-      //form incomplete
-      this.isCompleted = false;
-    }
-
-  }
-
-  checkedMarker(){
-    alert('tst');
   }
 
   filter(val: string): string[] {
@@ -232,6 +87,27 @@ export class MapComponent {
     index.stocks.forEach(function(marker){marker.selectable = false;});
   }
   
+
+  onSelectStock(event) {
+    const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
+    if(event.checked) {
+      selectedStocks.push(new FormControl(event.source.value));
+    } else {
+      const i = selectedStocks.controls.findIndex(x => x.value === event.source.value);
+      selectedStocks.removeAt(i);
+    }
+  }
+
+  checkIfChecked = (control: AbstractControl) => {
+    if(control['controls'].firstCtrl.length == 0) {
+      //console.log('nuthin checked');
+      return {notValid:true}
+    } else {
+      console.log('sumthin checked');
+      return null;
+    }    
+  };
+
 
 }
 
@@ -268,7 +144,6 @@ interface marker {
     tow_zone?:string;
     mileage?:string;
     tow_type?:string;
-
 
     lat: number;
     lng: number;
