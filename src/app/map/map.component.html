@@ -18,17 +18,6 @@
               <mat-tab-group>
                 <mat-tab label="Select Stocks">
 
-                  <!--<ol class="stocks">
-                    <li *ngFor="let m of markersFiltered; let i = index" >
-                        <mat-checkbox [(ngModel)]="m.selectable"  [ngModelOptions]="{standalone: true}"></mat-checkbox> <a href="">{{ m.number }}</a> {{ m.due_date }}, {{ m.number }}, {{ m.loss_type }}, {{ m.status }}, {{ m.pickup_location }}, {{ m.zip_code }}, {{ m.county }}, {{ m.city }}, {{ m.state }}, {{ m.model_year }}, {{ m.model_make }}, {{ m.model_name }}, {{ m.priority }}, {{ m.salvage_provider }} 
-                    </li>
-                  </ol>-->  
-                  <!--<p><strong>{{ branchName }}</strong> {{ branchAddress }}, stock counter  <span class="badge badge-secondary">{{ count }}</span></p>-->
-                  <!--<mat-checkbox formControlName="firstCtrl" required>Validate the first step</mat-checkbox>-->
-
-                  <!-- <pre>{{ firstFormGroup.value | json }}</pre>
-                  <pre>Form Valid? {{ firstFormGroup.valid | json }}</pre> -->
-
                   <ol class="stocks">
                     <li *ngFor="let m of markersFiltered; let i = index" >
                         <mat-checkbox 
@@ -62,7 +51,6 @@
                   <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
                     <ng-container *ngFor="let m of markersFiltered; let i = index">
                       <li *ngIf="(m.selectable == true)">
-                        <!-- ({{i + 1}}) -->  
                         <a href="">{{m.number}}</a> 
                         {{m.stock_address}}, {{m.model_year}}, {{m.model_make}}, {{m.model_name}}, {{m.provider_name}}, {{m.towable}}, {{m.tower}}, {{m.damage}}, {{m.status}} 
                       </li>
@@ -85,12 +73,13 @@
 
                 <agm-marker 
                   *ngFor="let m of markersFiltered; let i = index" 
-                  (markerClick)="clickedMarker(m, i);" 
+                  (markerClick)="clickedMarker(m, i);"
                   [latitude]="m.lat" 
                   [longitude]="m.lng" 
                   [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  
                   >
                 </agm-marker>
+
 
                 <agm-marker 
                   [latitude]="branchLat" 
@@ -111,12 +100,8 @@
           </div>
 
           <div class="col-xs-12">
-            <!-- <button id="review" mat-button matStepperNext [disabled]="buttonState()">Next</button> -->
             <button mat-button matStepperNext>Next</button>
 
-            <!-- <p><strong>{{ branchName }}</strong> <span class="badge badge-secondary">{{ count }}</span></p> -->
-            <!-- <mat-form-field><input matInput placeholder="Last name, First name" formControlName="firstCtrl" required></mat-form-field> -->
-            <!--<mat-checkbox formControlName="firstCtrl" required>Validate the first step</mat-checkbox>-->
           </div>
         </form>
       </mat-step>
@@ -127,7 +112,6 @@
           <ol class="stocks">
             <ng-container *ngFor="let m of markersFiltered; let i = index">
               <li *ngIf="(m.selectable == true)">
-                <!-- ({{i + 1}}) -->  
                 <a href="">{{m.number}}</a>  
                 {{m.storage_end}} 
                 {{m.total_payment_amount}} 

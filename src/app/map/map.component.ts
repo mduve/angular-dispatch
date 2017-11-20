@@ -38,7 +38,7 @@ export class MapComponent {
   isLinear = true;
   firstFormGroup: FormGroup;
 
-
+  
   constructor(private stocksService: StocksService, private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
@@ -54,16 +54,6 @@ export class MapComponent {
     );
   }
 
-  clickedMarker(marker:marker, index:number){
-
-    if (marker.selectable) {
-      marker.selectable = false;
-    } else {
-      marker.selectable = true;
-    }
-    this.count += marker.selectable ? 1 : -1;    
-  }
-
   filter(val: string): string[] {
     return this.markers.filter(marker => marker.branch.name.toLowerCase().indexOf(val.toLowerCase()) === 0);
   } 
@@ -71,7 +61,6 @@ export class MapComponent {
   displayFn(b): string {
     return b ? b.branch.name : b;
   }
-
 
   selectBranch(index){
     this.branchName = index.branch.name;
@@ -87,26 +76,51 @@ export class MapComponent {
     index.stocks.forEach(function(marker){marker.selectable = false;});
   }
   
+  clickedMarker(marker:marker, index:number){
+    const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
+    if (marker.selectable) {
+      marker.selectable = false;
+    } else {
+      marker.selectable = true;
+    }
+
+    if (marker.selectable) {
+      selectedStocks.push(new FormControl(marker.selectable));
+      console.log('selected');
+    } else {
+      const i = selectedStocks.controls.findIndex(x => x.value === marker.selectable);
+      selectedStocks.removeAt(i);
+      console.log('unselected');
+    }
+
+    // this.count += marker.selectable ? 1 : -1; 
+    // console.log(this.markers); 
+    // console.log(this.markersFiltered);
+    // console.log(this.markersFiltered.length);
+  }
+
 
   onSelectStock(event) {
     const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     if(event.checked) {
       selectedStocks.push(new FormControl(event.source.value));
+      console.log('selected');
     } else {
       const i = selectedStocks.controls.findIndex(x => x.value === event.source.value);
       selectedStocks.removeAt(i);
+      console.log('unselected');
     }
   }
 
+
   checkIfChecked = (control: AbstractControl) => {
     if(control['controls'].firstCtrl.length == 0) {
-      //console.log('nuthin checked');
       return {notValid:true}
     } else {
-      console.log('sumthin checked');
       return null;
     }    
   };
+
 
 
 }
