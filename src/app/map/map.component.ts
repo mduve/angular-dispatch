@@ -34,11 +34,12 @@ export class MapComponent {
   myControl: FormControl = new FormControl();
   filteredOptions: Observable<string[]>;
   selectedBranch:string = '';
+  branchSelected: boolean = false;
 
   isLinear = true;
   firstFormGroup: FormGroup;
 
-  
+
   constructor(private stocksService: StocksService, private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
@@ -74,6 +75,12 @@ export class MapComponent {
     this.count = 0;
 
     index.stocks.forEach(function(marker){marker.selectable = false;});
+
+    if (this.branchName == null) {
+      this.branchSelected = false;
+    } else {
+      this.branchSelected = true;
+    }
   }
   
   clickedMarker(marker:marker, index:number){

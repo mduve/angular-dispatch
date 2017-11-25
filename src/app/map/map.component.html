@@ -1,114 +1,87 @@
-    <mat-horizontal-stepper [linear]="isLinear">
+    <mat-form-field>
+      <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
+        <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
+            {{ marker.branch.name }} 
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-horizontal-stepper [linear]="isLinear" [hidden]="!branchSelected">
       <mat-step [stepControl]="firstFormGroup">
         <ng-template matStepLabel>Select &amp; Route Stocks</ng-template>
 
         <form [formGroup]="firstFormGroup">
 
-          <div class="col-xs-6">
+          <mat-tab-group>
+            <mat-tab label="Select Stocks">
 
-              <mat-form-field>
-                <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
-                  <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
-                      {{ marker.branch.name }} 
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-
-              <mat-tab-group>
-                <mat-tab label="Select Stocks">
-
-                  <ol class="stocks">
-                    <li *ngFor="let m of markersFiltered; let i = index" >
-                        <mat-checkbox 
-                          (change)="onSelectStock($event)"
-                          [(ngModel)]="m.selectable" 
-                          [ngModelOptions]="{standalone: true}"
-                          [value]="i">
-
-                          </mat-checkbox> 
-                          <a href="">{{ m.number }}</a> 
-                          {{ m.due_date }}, 
-                          {{ m.number }}, 
-                          {{ m.loss_type }}, 
-                          {{ m.status }}, 
-                          {{ m.pickup_location }}, 
-                          {{ m.zip_code }}, 
-                          {{ m.county }}, 
-                          {{ m.city }}, 
-                          {{ m.state }}, 
-                          {{ m.model_year }}, 
-                          {{ m.model_make }}, 
-                          {{ m.model_name }}, 
-                          {{ m.priority }}, 
-                          {{ m.salvage_provider }} 
-                    </li>
-                  </ol>  
-
-                </mat-tab>
-                <mat-tab label="Route Stocks">
-                  <p><strong>Start</strong> {{ branchAddress }}</p>
-                  <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
-                    <ng-container *ngFor="let m of markersFiltered; let i = index">
-                      <li *ngIf="(m.selectable == true)">
-                        <a href="">{{m.number}}</a> 
-                        {{m.stock_address}}, {{m.model_year}}, {{m.model_make}}, {{m.model_name}}, {{m.provider_name}}, {{m.towable}}, {{m.tower}}, {{m.damage}}, {{m.status}} 
-                      </li>
-                    </ng-container>
-                  </ol>
-                  <p><strong>Finish</strong> {{ branchAddress }}</p>
-                </mat-tab>
-              </mat-tab-group>
-
-
-          </div>
-          <div class="col-xs-6">
-              <agm-map 
-                [latitude]="lat" 
-                [longitude]="lng"
-                [zoom]="zoom"
-                [disableDefaultUI]=false
-                [zoomControl]="true"
-                [styles]="styles">
-
-                <agm-marker 
-                  *ngFor="let m of markersFiltered; let i = index" 
-                  (markerClick)="clickedMarker(m, i);"
-                  [latitude]="m.lat" 
-                  [longitude]="m.lng" 
-                  [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  
-                  >
-                </agm-marker>
-
-
-                <agm-marker 
-                  [latitude]="branchLat" 
-                  [longitude]="branchLng" 
-                  [iconUrl]="'../assets/branch.png'">
-                </agm-marker>
-
-                 <agm-circle 
-                  [latitude]="branchLat" 
-                  [longitude]="branchLng" 
-                  [radius]="50000"
-                  [fillColor]="'red'"
-                  [circleDraggable]="false"
-                  [editable]="false">
-                </agm-circle>
-
-              </agm-map>
-          </div>
-
-          <div class="col-xs-12">
-            <button mat-button matStepperNext>Next</button>
-
-          </div>
+              <table>
+                <tr>
+                  <th>Stock</th>
+                  <th>Due Date</th>
+                  <th>Loss Type</th>
+                  <th>Status</th>
+                  <th>Pickup Location</th>
+                  <th>County</th>
+                  <th>City</th>
+                  <th>Make/Model</th>
+                  <th>Priority</th>
+                  <th>Provider</th>
+                </tr>
+                <tr *ngFor='let m of markersFiltered; let i = index'>
+                  <td>
+                    <mat-checkbox (change)="onSelectStock($event)" [(ngModel)]="m.selectable" [ngModelOptions]="{standalone: true}" [value]="i"></mat-checkbox> <a href="">{{ m.number }}</a>
+                  </td>
+                  <td>
+                    {{ m.due_date }}
+                  </td>
+                  <td>
+                    {{ m.loss_type }}
+                  </td>
+                  <td>
+                    {{ m.status }}
+                  </td>
+                  <td>
+                    {{ m.pickup_location }}
+                  </td>
+                  <td>
+                    {{ m.county }}
+                  </td>
+                  <td>
+                    {{ m.city }} {{ m.state }} {{ m.zip_code }}
+                  </td>
+                  <td>
+                    {{ m.model_year }} {{ m.model_make }} {{ m.model_name }}
+                  </td>
+                  <td>
+                    {{ m.priority }}
+                  </td>
+                  <td>
+                    {{ m.salvage_provider }} 
+                  </td>
+                </tr>
+              </table>
+            </mat-tab>
+            <mat-tab label="Route Stocks">
+              <p><strong>Start</strong> {{ branchAddress }}</p>
+              <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
+                <ng-container *ngFor="let m of markersFiltered; let i = index">
+                  <li *ngIf="(m.selectable == true)">
+                    <a href="">{{m.number}}</a> 
+                    {{m.stock_address}}, {{m.model_year}}, {{m.model_make}}, {{m.model_name}}, {{m.provider_name}}, {{m.towable}}, {{m.tower}}, {{m.damage}}, {{m.status}} 
+                  </li>
+                </ng-container>
+              </ol>
+              <p><strong>Finish</strong> {{ branchAddress }}</p>
+            </mat-tab>
+          </mat-tab-group>
+          <button mat-button matStepperNext>Next</button>
         </form>
       </mat-step>
 
       <mat-step>
         <ng-template matStepLabel>Review</ng-template>
-        <div class="col-xs-12">
           <ol class="stocks">
             <ng-container *ngFor="let m of markersFiltered; let i = index">
               <li *ngIf="(m.selectable == true)">
@@ -127,13 +100,49 @@
               </li>
             </ng-container>
           </ol>
-        </div>
-        <div class="col-xs-12">
           <button disabled>Cancel Dispatch</button>
           <button disabled>logout Tower</button>
           <button disabled>Dispatch</button>
-        </div>
   
       </mat-step>
 
     </mat-horizontal-stepper>
+
+<div class="row">
+  <div class="col-xs-12">
+      <agm-map 
+        [latitude]="lat" 
+        [longitude]="lng"
+        [zoom]="zoom"
+        [disableDefaultUI]=false
+        [zoomControl]="true"
+        [styles]="styles">
+
+        <agm-marker 
+          *ngFor="let m of markersFiltered; let i = index" 
+          (markerClick)="clickedMarker(m, i);"
+          [latitude]="m.lat" 
+          [longitude]="m.lng" 
+          [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  
+          >
+        </agm-marker>
+
+
+        <agm-marker 
+          [latitude]="branchLat" 
+          [longitude]="branchLng" 
+          [iconUrl]="'../assets/branch.png'">
+        </agm-marker>
+
+         <agm-circle 
+          [latitude]="branchLat" 
+          [longitude]="branchLng" 
+          [radius]="50000"
+          [fillColor]="'red'"
+          [circleDraggable]="false"
+          [editable]="false">
+        </agm-circle>
+
+      </agm-map>
+  </div>  
+</div>

@@ -43,7 +43,31 @@ agm-map {
 
 .mat-form-field {
     width: 100%;
-    max-width: 10rem;
+    max-width: 20rem;
+    padding: 0 2rem;
 }
 
 .stocks li {border-bottom: 1px solid #cecece;margin: .5rem 0;}
+
+
+table {
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+
+table td,
+table th {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+table td {
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+}
+
