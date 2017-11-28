@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { StocksService } from '../stocks.service';
+import { StocksService } from '../../services/stocks.service';
 
 import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +11,7 @@ import 'rxjs/Rx';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css', '../../.././node_modules/dragula/dist/dragula.css'],
+  styleUrls: ['./map.component.css', '../../../.././node_modules/dragula/dist/dragula.css'],
 })
 
 export class MapComponent {
