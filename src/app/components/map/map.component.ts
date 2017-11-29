@@ -39,6 +39,7 @@ export class MapComponent {
   isLinear = true;
   firstFormGroup: FormGroup;
 
+  mapVisible: boolean = true;
 
   constructor(private stocksService: StocksService, private _formBuilder: FormBuilder) {}
 

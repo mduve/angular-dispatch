@@ -1,18 +1,18 @@
-<mat-form-field>
-  <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
-    <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
-        {{ marker.branch.name }} 
-    </mat-option>
-  </mat-autocomplete>
-</mat-form-field>
-
-<mat-horizontal-stepper [linear]="isLinear" [hidden]="!branchSelected">
+<!-- <mat-horizontal-stepper [linear]="isLinear" [hidden]="!branchSelected"> -->
+<mat-horizontal-stepper [linear]="isLinear">
   <mat-step [stepControl]="firstFormGroup">
     <ng-template matStepLabel>Select + Route</ng-template>
 
-    <form [formGroup]="firstFormGroup">
+    <mat-form-field>
+      <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
+        <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
+            {{ marker.branch.name }} 
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
+    <form [formGroup]="firstFormGroup" [hidden]="!branchSelected">
       <mat-tab-group>
         <mat-tab label="Select Stocks">
 
@@ -78,6 +78,9 @@
       </mat-tab-group>
       <!-- <button mat-button matStepperNext>Next</button> -->
     </form>
+
+    <button mat-button matStepperNext>Next</button>
+
   </mat-step>
 
   <mat-step>
@@ -108,39 +111,10 @@
 
 </mat-horizontal-stepper>
 
-<agm-map 
-  [latitude]="lat" 
-  [longitude]="lng"
-  [zoom]="zoom"
-  [disableDefaultUI]=false
-  [zoomControl]="true"
-  [styles]="styles"
-  [hidden]="">
 
-  <agm-marker 
-    *ngFor="let m of markersFiltered; let i = index" 
-    (markerClick)="clickedMarker(m, i);"
-    [latitude]="m.lat" 
-    [longitude]="m.lng" 
-    [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  
-    >
-  </agm-marker>
-
-
-  <agm-marker 
-    [latitude]="branchLat" 
-    [longitude]="branchLng" 
-    [iconUrl]="'../assets/branch.png'">
-  </agm-marker>
-
-   <agm-circle 
-    [latitude]="branchLat" 
-    [longitude]="branchLng" 
-    [radius]="50000"
-    [fillColor]="'red'"
-    [circleDraggable]="false"
-    [editable]="false">
-  </agm-circle>
-
+<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]=false [zoomControl]="true" [styles]="styles" [hidden]="!mapVisible">
+  <agm-marker *ngFor="let m of markersFiltered; let i = index" (markerClick)="clickedMarker(m, i);" [latitude]="m.lat" [longitude]="m.lng" [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  ></agm-marker>
+  <agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.png'"></agm-marker>
+  <agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
 </agm-map>
 

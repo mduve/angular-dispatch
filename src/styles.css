@@ -20,6 +20,11 @@ ol {
 agm-map {
   height: 375px;
   width: 100%;
+
+  position:fixed !important;
+  bottom:0 !important;
+  left:0 !important;
+  z-index: -1 !important;
 }
 
 .container-fluid .row{
@@ -44,6 +49,11 @@ agm-map {
 .mat-form-field {
     width: 100%;
     max-width: 20rem;
+    padding: 0 2rem;
+}
+
+form {
+    width: 100%;
     padding: 0 2rem;
 }
 
