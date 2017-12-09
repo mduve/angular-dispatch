@@ -81,3 +81,7 @@ table td {
     text-transform: none;
 }
 
+app-stocks-table {
+    width: 100%;
+}
+

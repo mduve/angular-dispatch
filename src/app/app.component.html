@@ -1,7 +1,22 @@
 <app-header></app-header>
 
 <div class="container-fluid">
- 	<div class="row">
-		<app-map style="width:100%;"></app-map>
+	<div class="row">
+
+		<select #branch (change)="getBranchStocks(branch.value)" style="height: fit-content;" >
+			<option *ngFor="let branch of branchesObservable | async" value="{{ branch.branchId }}">{{ branch.name }}</option>
+		</select>
+
+		<ul>
+			<li *ngFor="let stock of stocksObservable | async " >
+			-- branchId: {{ stock.branchId }}
+			-- number: {{ stock.number }} 
+			-- status: {{ stock.status }}
+			-- due date: {{ stock.due_date }}
+			</li>
+		</ul> 
+
+		<!-- <app-map style="width:100%;"></app-map> -->
+		<app-stocks-table></app-stocks-table>
 	</div>
 </div>

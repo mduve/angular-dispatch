@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { StocksService } from '../../services/stocks.service';
+import { StocksService } from '../../services/stocks-mock.service';
 
 import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
