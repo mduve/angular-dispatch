@@ -10,7 +10,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { MapComponent } from './components/map/map.component';
 import { StocksTableComponent } from './components/stocks-table/stocks-table.component';
 import { StocksService } from './services/stocks.service';
-import { DataService } from './services/data.service';
 // import { StocksService } from './services/stocks-mock.service';
 import { AgmCoreModule } from '@agm/core';
 import { DragulaModule, DragulaService } from '../../node_modules/ng2-dragula/ng2-dragula';
@@ -44,7 +43,6 @@ export class MaterialModule {}
   providers: [
     DragulaService,
     StocksService,
-    DataService,
   ],
   bootstrap: [AppComponent]
 })
