@@ -1,18 +1,196 @@
-<select #branch (change)="getBranchStocks(branch.value)" >
+<mat-horizontal-stepper [linear]="isLinear">
+  <mat-step [stepControl]="firstFormGroup">
+    <ng-template matStepLabel>Select + Route</ng-template>
+
+
+     <mat-form-field>
+      <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="branchCtrl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="getBranchStocks($event.option.value)" [displayWith]="displayFn">
+        <mat-option *ngFor="let branch of filteredBranches | async;" [value]="branch.name">
+            {{ branch.name }} 
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+<!-- old code -->
+    <select #branch (change)="getBranchStocks(branch.value)" >
+      <option value="null">Choose a branch</option>
+      <option *ngFor="let branch of branchesObservable | async" value="{{ branch.branchId }}">{{ branch.name }}</option>
+    </select> 
+
+    <form>
+      <mat-tab-group>
+        <mat-tab label="Select Stocks">
+
+          <mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="number">
+              <mat-header-cell *matHeaderCellDef> Number </mat-header-cell>
+              <mat-cell *matCellDef="let stock"> {{stock.number}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="due_date">
+              <mat-header-cell *matHeaderCellDef> Due Date </mat-header-cell>
+              <mat-cell *matCellDef="let stock"> {{stock.due_date}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="loss_type">
+              <mat-header-cell *matHeaderCellDef> Loss Type </mat-header-cell>
+              <mat-cell *matCellDef="let stock"> {{stock.loss_type}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+              <mat-cell *matCellDef="let stock"> {{stock.status}} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          
+        </mat-tab>
+        <mat-tab label="Route Stocks">
+
+          <ul>
+            <li *ngFor="let stock of stocksObservable | async " >
+            -- branchId: {{ stock.branchId }}
+            -- number: {{ stock.number }} 
+            -- status: {{ stock.status }}
+            -- due date: {{ stock.due_date }}
+            </li>
+          </ul>
+
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Review</ng-template>
+  </mat-step>
+</mat-horizontal-stepper>
+
+
+
+<!-- original map -->
+<!-- <mat-horizontal-stepper [linear]="isLinear" [hidden]="!branchSelected"> -->
+<!-- <mat-horizontal-stepper [linear]="isLinear">
+  <mat-step [stepControl]="firstFormGroup">
+    <ng-template matStepLabel>Select + Route</ng-template>
+    <mat-form-field>
+      <input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="myControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="selectBranch($event.option.value)" [displayWith]="displayFn">
+        <mat-option *ngFor="let marker of filteredOptions | async;" [value]="marker">
+            {{ marker.branch.name }} 
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <form [formGroup]="firstFormGroup" [hidden]="!branchSelected">
+      <mat-tab-group>
+        <mat-tab label="Select Stocks">
+          <table>
+            <tr>
+              <th>Stock</th>
+              <th>Due Date</th>
+              <th>Loss Type</th>
+              <th>Status</th>
+              <th>Pickup Location</th>
+              <th>County</th>
+              <th>City</th>
+              <th>Make/Model</th>
+              <th>Priority</th>
+              <th>Provider</th>
+            </tr>
+            <tr *ngFor='let m of markersFiltered; let i = index'>
+              <td>
+                <mat-checkbox (change)="onSelectStock($event)" [(ngModel)]="m.selectable" [ngModelOptions]="{standalone: true}" [value]="i"></mat-checkbox> <a href="">{{ m.number }}</a>
+              </td>
+              <td>
+                {{ m.due_date }}
+              </td>
+              <td>
+                {{ m.loss_type }}
+              </td>
+              <td>
+                {{ m.status }}
+              </td>
+              <td>
+                {{ m.pickup_location }}
+              </td>
+              <td>
+                {{ m.county }}
+              </td>
+              <td>
+                {{ m.city }} {{ m.state }} {{ m.zip_code }}
+              </td>
+              <td>
+                {{ m.model_year }} {{ m.model_make }} {{ m.model_name }}
+              </td>
+              <td>
+                {{ m.priority }}
+              </td>
+              <td>
+                {{ m.salvage_provider }} 
+              </td>
+            </tr>
+          </table>
+        </mat-tab>
+        <mat-tab label="Route Stocks">
+          <p><strong>Start</strong> {{ branchAddress }}</p>
+          <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
+            <ng-container *ngFor="let m of markersFiltered; let i = index">
+              <li *ngIf="(m.selectable == true)">
+                <a href="">{{m.number}}</a> 
+                {{m.stock_address}}, {{m.model_year}}, {{m.model_make}}, {{m.model_name}}, {{m.provider_name}}, {{m.towable}}, {{m.tower}}, {{m.damage}}, {{m.status}} 
+              </li>
+            </ng-container>
+          </ol>
+          <p><strong>Finish</strong> {{ branchAddress }}</p>
+        </mat-tab>
+      </mat-tab-group> -->
+      <!-- <button mat-button matStepperNext>Next</button> -->
+<!--     </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Review</ng-template>
+      <ol class="stocks">
+        <ng-container *ngFor="let m of markersFiltered; let i = index">
+          <li *ngIf="(m.selectable == true)">
+            <a href="">{{m.number}}</a>  
+            {{m.storage_end}} 
+            {{m.total_payment_amount}} 
+            {{m.total_hauling_amount}} 
+            {{m.payment_type}} 
+            {{m.checks_payable_to}} 
+            {{m.dispatch_note}} 
+            {{m.destination}} 
+            {{m.tow_zone}} 
+            {{m.mileage}} 
+            {{m.tow_type}}
+          </li>
+        </ng-container>
+      </ol>
+      <button disabled>Cancel Dispatch</button>
+      <button disabled>logout Tower</button>
+      <button disabled>Dispatch</button>
+  </mat-step>
+</mat-horizontal-stepper>
+<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]=false [zoomControl]="true" [styles]="styles" [hidden]="!mapVisible">
+  <agm-marker *ngFor="let m of markersFiltered; let i = index" (markerClick)="clickedMarker(m, i);" [latitude]="m.lat" [longitude]="m.lng" [iconUrl]="m.selectable ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"  ></agm-marker>
+  <agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.png'"></agm-marker>
+  <agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
+</agm-map> -->
+
+
+<!-- original stock table -->
+<!-- <select #branch (change)="getBranchStocks(branch.value)" >
   <option value="null">Choose a branch</option>
   <option *ngFor="let branch of branchesObservable | async" value="{{ branch.branchId }}">{{ branch.name }}</option>
 </select>
-
 <ul>
   <li *ngFor="let stock of stocksObservable | async " >
-  -- branchId: {{ stock.branchId }}
-  -- number: {{ stock.number }} 
-  -- status: {{ stock.status }}
-  -- due date: {{ stock.due_date }}
+  branchId: {{ stock.branchId }}
+  number: {{ stock.number }} 
+  status: {{ stock.status }}
+  due date: {{ stock.due_date }}
   </li>
 </ul> 
-
-
 <div>
   <mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="number">
@@ -34,34 +212,4 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-</div> 
-
-<!-- <div>
-  <select #branch (change)="selectBranch(branch.value)">
-    <option value="1">Charlotte</option>
-    <option value="2">Chicago</option>
-    <option value="3">Dallas</option>
-  </select>
-</div>
-<div>
-  <mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="number">
-      <mat-header-cell *matHeaderCellDef> Number </mat-header-cell>
-      <mat-cell *matCellDef="let stock"> {{stock.number}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="due_date">
-      <mat-header-cell *matHeaderCellDef> Due Date </mat-header-cell>
-      <mat-cell *matCellDef="let stock"> {{stock.due_date}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="loss_type">
-      <mat-header-cell *matHeaderCellDef> Loss Type </mat-header-cell>
-      <mat-cell *matCellDef="let stock"> {{stock.loss_type}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let stock"> {{stock.status}} </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div> -->
+</div>  -->
