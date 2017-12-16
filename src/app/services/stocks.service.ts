@@ -8,7 +8,7 @@ import { Stock } from '../models/stock.model';
 @Injectable()
 export class StocksService {
 
-//  baseUrl:string = "http://localhost:3000";
+  //private baseUrl:string = "http://localhost:3000";
   private baseUrl = 'http://my-json-server.typicode.com/mduve/services';
   private branchId = null;
 

@@ -23,48 +23,53 @@ export class StocksTableComponent {
     //services
     branchesObservable : Observable<object> ; 
     stocksObservable : Observable<object> ; 
-    //mat datatable
+    //mat-datatable
     dataSource = null;
     displayedColumns = ['number', 'due_date', 'loss_type', 'status'];
-    //mat autocomplete
-    branchCtrl = new FormControl();
+    //mat-autocomplete
+    //https://stackblitz.com/edit/angular-5dqmsw?file=app%2Fapp.component.ts
+    branches: any = []; 
+    branchCtrl: FormControl = new FormControl();
     filteredBranches: Observable<any[]>;
-    branches; 
 
     constructor(
       private stocksService: StocksService,
     ) {  
-        //load branches for the old select dropdown
+        //load branches for the select dropdown
         this.branchesObservable = this.stocksService.get_branches();
-
-        //https://stackblitz.com/edit/angular-5dqmsw?file=app%2Fapp.component.ts
-        this.branches = this.stocksService.get_branches()
+        //load branches for mat-autocomplete
+        this.branches = this.stocksService.get_branches();
         this.filteredBranches = this.branchCtrl.valueChanges
           .startWith(null)
-          .debounceTime(200)
-          .distinctUntilChanged()
+          .map(b => b && typeof b === 'object' ? b.name : b)
           .switchMap(val => {
             return this.filterBranches(val || '')
           })
-
     }
-
+    //mat-autocomplete
+    displayFn(b): string {
+      return b ? b.name : b;
+    }
     filterBranches(val: string) {
-      return this.branches
-        .map(response => response.filter(option => { 
+      return this.branches.map(response => response.filter(option => { 
           return option.name.toLowerCase().indexOf(val.toLowerCase()) === 0
         }));
     }
 
     //fetch stock data
     getBranchStocks(value){
+      this.stocksObservable = this.stocksService.get_stocks(value.branchId);
+      this.dataSource = new StockDataSource(this.stocksService);
+    }
+
+    getBranchStocksSelect(value){
       this.stocksObservable = this.stocksService.get_stocks(value);
       this.dataSource = new StockDataSource(this.stocksService);
     }
 
 }
 
-//mat datatable
+//mat-datatable
 export class StockDataSource extends DataSource<any> {
   constructor(private StocksService: StocksService) {
     super();
