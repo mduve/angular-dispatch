@@ -20,15 +20,6 @@ ol {
 agm-map {
   height: 375px;
   width: 100%;
-
-  position:fixed !important;
-  bottom:0 !important;
-  left:0 !important;
-  z-index: -1 !important;
-}
-
-.container-fluid .row{
-	padding: 15px;
 }
 
 .col-xs-6 {width:50%;display: inline-block;float: left;}
@@ -83,5 +74,9 @@ table td {
 
 app-stocks-table {
     width: 100%;
+}
+
+body .mat-horizontal-content-container {
+    padding: 24px 0 24px;
 }
 

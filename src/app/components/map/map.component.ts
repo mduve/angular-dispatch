@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { StocksService } from '../../services/stocks-mock.service';
+import { StocksMockService } from '../../services/stocks-mock.service';
 
 import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -41,10 +41,10 @@ export class MapComponent {
 
   mapVisible: boolean = true;
 
-  constructor(private stocksService: StocksService, private _formBuilder: FormBuilder) {}
+  constructor(private stocksMockService: StocksMockService, private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    this.markers = this.stocksService.get();
+    this.markers = this.stocksMockService.get();
     this.filteredOptions = this.myControl.valueChanges
       .startWith(null)
       .map(b => b && typeof b === 'object' ? b.name : b)
