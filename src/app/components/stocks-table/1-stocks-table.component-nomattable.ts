@@ -1,7 +1,5 @@
-// import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DataSource } from '@angular/cdk/collections';
 import { StocksService } from '../../services/stocks.service';
 
 import { Stock } from '../../models/stock.model';
@@ -19,10 +17,8 @@ import 'rxjs/Rx';
   styleUrls: [
     './stocks-table.component.css', 
     '../../../.././node_modules/dragula/dist/dragula.css'
-  ],
+  ]
 })
-
-
 
 export class StocksTableComponent implements OnInit {
 
@@ -39,9 +35,7 @@ export class StocksTableComponent implements OnInit {
     //services
     branchesObservable : Observable<object> ; 
     stocksObservable : Observable<object> ; 
-    //mat-datatable
-    dataSource = null;
-    displayedColumns = ['number', 'due_date', 'loss_type', 'status'];
+
     //mat-autocomplete
     branches: any = []; 
     branchCtrl: FormControl = new FormControl();
@@ -53,9 +47,6 @@ export class StocksTableComponent implements OnInit {
     //select stocks
     stocks:object;
     isChecked: boolean;
-
-    stocks2:Object[] = [];
-
 
     constructor(
       private stocksService: StocksService,
@@ -97,7 +88,6 @@ export class StocksTableComponent implements OnInit {
     getBranchStocks(value){
       this.stocksObservable = this.stocksService.get_stocks(value.branchId);
       this.stocksObservable.subscribe(data=>this.stocks=data);
-      this.dataSource = new StockDataSource(this.stocksService);
 
 
       //Map data
@@ -138,48 +128,13 @@ export class StocksTableComponent implements OnInit {
         return null;
       }    
     }
-    
-    // old
-    // onSelectStock(event) {
-    //   const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
-    //   if(event.checked) {
-    //     selectedStocks.push(new FormControl(event.source.value));
-    //   } else {
-    //     const i = selectedStocks.controls.findIndex(x => x.value === event.source.value);
-    //     selectedStocks.removeAt(i);
-    //   }
-    // }
-
-    selectStock(stock, event) {
-        let stockObj = stock;
-        let index = stockObj.id;
-        if (event.source.checked) {
-            this.stocks2.push(stockObj);
-         } else {
-            if (index !== -1) {
-                this.stocks2.splice(index, 1);
-            }
-        }
-        //this.stocks2 = this.stocks2;
-        //console.log(this.stocks2);
-
-    }    
-
-
 
 
 }
 
-//mat-datatable
-export class StockDataSource extends DataSource<any> {
-  constructor(private StocksService: StocksService) {
-    super();
-  }
-  connect(): Observable<Stock[]> {
-    return this.StocksService.getStocks();
-  }
-  disconnect() {}
-}
+
+
+
 
 
 

@@ -54,6 +54,8 @@ export class StocksTableComponent implements OnInit {
     stocks:object;
     isChecked: boolean;
 
+    //stocks2:Object[] = [];
+    //stocks2:{number:number}[] = [];
     stocks2:Object[] = [];
 
 
@@ -150,21 +152,19 @@ export class StocksTableComponent implements OnInit {
     //   }
     // }
 
-    selectStock(stock, event) {
-        let stockObj = stock;
-        let index = stockObj.id;
-        if (event.source.checked) {
-            this.stocks2.push(stockObj);
-         } else {
-            if (index !== -1) {
-                this.stocks2.splice(index, 1);
-            }
-        }
-        //this.stocks2 = this.stocks2;
-        //console.log(this.stocks2);
-
+    selectAnswer(category, event) {
+        // var index = this.stocks2.indexOf(event.source.value);
+        // if (event.source.checked) {
+        //     this.stocks2.push(event.source.value);
+        //  } else {
+        //     if (index !== -1) {
+        //         this.stocks2.splice(index, 1);
+        //     }
+        // }
+        // this.stocks2 = this.stocks2;
+        alert(category);
+        alert(event);
     }    
-
 
 
 
