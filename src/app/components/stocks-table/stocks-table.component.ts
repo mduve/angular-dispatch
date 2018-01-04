@@ -1,5 +1,5 @@
 // import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataSource } from '@angular/cdk/collections';
 import { StocksService } from '../../services/stocks.service';
@@ -12,6 +12,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 
+import { MatCheckbox } from '@angular/material';
 
 @Component({
   selector: 'app-stocks-table',
@@ -51,10 +52,13 @@ export class StocksTableComponent implements OnInit {
     firstFormGroup: FormGroup;
 
     //select stocks
-    stocks:object;
-    isChecked: boolean;
+    stocksUnSelected:any;
+    stocksSelected:any;
 
-    stocks2:Object[] = [];
+    isChecked: boolean;
+    @ViewChildren('myCheckbox') private myCheckboxes : QueryList<any>;
+
+
 
 
     constructor(
@@ -72,7 +76,6 @@ export class StocksTableComponent implements OnInit {
           return this.filterBranches(val || '')
         });
       this.validateStepper();
-
     }
 
     //mat-stepper : set/reset
@@ -96,9 +99,11 @@ export class StocksTableComponent implements OnInit {
     //fetch stock data into table
     getBranchStocks(value){
       this.stocksObservable = this.stocksService.get_stocks(value.branchId);
-      this.stocksObservable.subscribe(data=>this.stocks=data);
       this.dataSource = new StockDataSource(this.stocksService);
-
+      //for the map/marker selections
+      this.stocksObservable.subscribe(data=>this.stocksUnSelected=data);
+      //for the table selections
+      this.stocksObservable.subscribe(data=>this.stocksSelected=data);
 
       //Map data
       this.lat = value.lat;
@@ -112,22 +117,38 @@ export class StocksTableComponent implements OnInit {
 
       //reset validator
       this.validateStepper();
-
+      //reset stocks
+      this.stocksSelected = [];
+      this.stocksUnSelected = []; 
     }
 
     //agm-map
-    clickedMarker(marker, index:number){
-      if (marker.isChecked) {marker.isChecked = false;} else {marker.isChecked = true;}
+    selectStockMarker(stock, index:number){
+        //1 set initial values
+        if (stock.isChecked) {stock.isChecked = false;} else {stock.isChecked = true;}
+        //2
+        let stocksArray = this.stocksSelected.map(function (arrayItem) {return arrayItem.number;});
+        let indexOfSelectedStock = stocksArray.indexOf(stock.number);
+        let myCheckboxes = this.myCheckboxes.toArray();
+        const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
 
-      const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
-      if (marker.isChecked) {
-        selectedStocks.push(new FormControl(marker.selectable));
-        console.log('is checked');
-      } else {
-        const i = selectedStocks.controls.findIndex(x => x.value === marker.selectable);
-        selectedStocks.removeAt(i);
-        console.log('is not checked');
-      }
+
+        if (stock.isChecked) { 
+
+          this.stocksUnSelected[indexOfSelectedStock].isChecked = true;
+          this.stocksSelected[indexOfSelectedStock].isChecked = true;
+          myCheckboxes[index].checked = true;
+
+          selectedStocks.push(new FormControl(stock.isChecked));
+        } else {
+          this.stocksUnSelected[indexOfSelectedStock].isChecked = false;
+          this.stocksSelected[indexOfSelectedStock].isChecked = false;
+          myCheckboxes[index].checked = false;
+
+          const i = selectedStocks.controls.findIndex(x => x.value === stock.selectable);
+          selectedStocks.removeAt(i);
+        }
+
     }
 
     //mat-stepper
@@ -137,35 +158,7 @@ export class StocksTableComponent implements OnInit {
       } else {
         return null;
       }    
-    }
-    
-    // old
-    // onSelectStock(event) {
-    //   const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
-    //   if(event.checked) {
-    //     selectedStocks.push(new FormControl(event.source.value));
-    //   } else {
-    //     const i = selectedStocks.controls.findIndex(x => x.value === event.source.value);
-    //     selectedStocks.removeAt(i);
-    //   }
-    // }
-
-    selectStock(stock, event) {
-        let stockObj = stock;
-        let index = stockObj.id;
-        if (event.source.checked) {
-            this.stocks2.push(stockObj);
-         } else {
-            if (index !== -1) {
-                this.stocks2.splice(index, 1);
-            }
-        }
-        //this.stocks2 = this.stocks2;
-        //console.log(this.stocks2);
-
-    }    
-
-
+    }  
 
 
 }
@@ -180,7 +173,6 @@ export class StockDataSource extends DataSource<any> {
   }
   disconnect() {}
 }
-
 
 
 

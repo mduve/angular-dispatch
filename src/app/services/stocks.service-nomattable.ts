@@ -3,7 +3,7 @@ import { HttpClient }   from '@angular/common/http';
 import { Stock } from '../models/stock.model';
 
 @Injectable()
-export class StocksService {
+export class StocksServiceNoMattable {
 
   //private baseUrl:string = "http://localhost:3000";
   private baseUrl = 'http://my-json-server.typicode.com/mduve/services';
@@ -23,3 +23,5 @@ export class StocksService {
   }
 
 }
+
+// https://stackoverflow.com/questions/47681640/how-to-delete-mat-row-from-mat-table-material-design

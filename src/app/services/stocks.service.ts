@@ -32,3 +32,6 @@ export class StocksService {
 
 
 }
+
+
+// https://stackoverflow.com/questions/47681640/how-to-delete-mat-row-from-mat-table-material-design
