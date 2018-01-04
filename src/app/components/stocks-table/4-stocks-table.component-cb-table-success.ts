@@ -1,5 +1,7 @@
+//https://stackblitz.com/edit/angular-view-children?file=app%2Fapp.component.ts
+
 // import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataSource } from '@angular/cdk/collections';
 import { StocksService } from '../../services/stocks.service';
@@ -13,7 +15,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 
 import { MatCheckbox } from '@angular/material';
-import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-stocks-table',
@@ -52,11 +53,12 @@ export class StocksTableComponent implements OnInit {
     isLinear = true;
     firstFormGroup: FormGroup;
 
-    //select stocks
+    //select/unselect stocks
     stocksUnSelected:any;
     stocksSelected:any;
 
     isChecked: boolean;
+    @ViewChildren('myCheckbox') private myCheckboxes : QueryList<any>;
 
 
 
@@ -117,57 +119,43 @@ export class StocksTableComponent implements OnInit {
 
       //reset validator
       this.validateStepper();
-      //reset stocks
+      //reset selected/unselected stocks array
       this.stocksSelected = [];
       this.stocksUnSelected = []; 
     }
 
     //agm-map
-    @ViewChild('myCheckbox') private myCheckbox: MatCheckbox;
-
-    someFunction(myCheckbox){
-      if (myCheckbox.checked) {
-        this.myCheckbox.checked = false;
-      } else {
-        this.myCheckbox.checked = true;
-      }
-    }
-
-
     selectStockMarker(stock, index:number){
-        //1 MUST HAPPEN FIRST
+        //1 set initial values
         if (stock.isChecked) {stock.isChecked = false;} else {stock.isChecked = true;}
-
-        //2
+        //2 map selected stocks array
         let stocksArray = this.stocksSelected.map(function (arrayItem) {return arrayItem.number;});
         let indexOfSelectedStock = stocksArray.indexOf(stock.number);
+        //3 set up local variable to array
+        let myCheckboxes = this.myCheckboxes.toArray();
+        //4 set mat-stepper validation 
+        const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
 
 
         if (stock.isChecked) { 
-
+          //2 mark selected or unselected in mapped arrays
           this.stocksUnSelected[indexOfSelectedStock].isChecked = true;
-
-          //need to apply check box in selected array 
           this.stocksSelected[indexOfSelectedStock].isChecked = true;
-          //this.myCheckbox.checked = true;
-        } else {
-
-          this.stocksUnSelected[indexOfSelectedStock].isChecked = false;
-
-          //need to apply check box in selected array 
-          this.stocksSelected[indexOfSelectedStock].isChecked = false;
-          //this.myCheckbox.checked = false;
-        }
-
-        const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
-        if (stock.isChecked) {
+          //3 mark local variable
+          myCheckboxes[index].checked = true;
+          //4 mat-stepper validation
           selectedStocks.push(new FormControl(stock.isChecked));
-          //console.log('is checked');
         } else {
+          //2 mark selected or unselected in mapped arrays
+          this.stocksUnSelected[indexOfSelectedStock].isChecked = false;
+          this.stocksSelected[indexOfSelectedStock].isChecked = false;
+          //3 mark local variable
+          myCheckboxes[index].checked = false;
+          //4 mat-stepper validation
           const i = selectedStocks.controls.findIndex(x => x.value === stock.selectable);
           selectedStocks.removeAt(i);
-          //console.log('is not checked');
         }
+
     }
 
     //mat-stepper
@@ -177,24 +165,7 @@ export class StocksTableComponent implements OnInit {
       } else {
         return null;
       }    
-    }
-    
-
-    selectStock(stock, event) {
-
-      let stocksArray = this.stocksUnSelected.map(function (arrayItem) {return arrayItem.number;});
-      let indexOfSelectedStock = stocksArray.indexOf(stock.number);
-
-      if (event.source.checked) { 
-        this.stocksUnSelected[indexOfSelectedStock].isChecked = true;
-        this.stocksSelected[indexOfSelectedStock].isChecked = true;
-      } else {
-        this.stocksUnSelected[indexOfSelectedStock].isChecked = false;
-        this.stocksSelected[indexOfSelectedStock].isChecked = false;
-      }
-
-    }   
-
+    }  
 
 
 }

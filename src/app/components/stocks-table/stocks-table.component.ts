@@ -51,7 +51,7 @@ export class StocksTableComponent implements OnInit {
     isLinear = true;
     firstFormGroup: FormGroup;
 
-    //select stocks
+    //select/unselect stocks
     stocksUnSelected:any;
     stocksSelected:any;
 
@@ -117,7 +117,7 @@ export class StocksTableComponent implements OnInit {
 
       //reset validator
       this.validateStepper();
-      //reset stocks
+      //reset selected/unselected stocks array
       this.stocksSelected = [];
       this.stocksUnSelected = []; 
     }
@@ -126,25 +126,30 @@ export class StocksTableComponent implements OnInit {
     selectStockMarker(stock, index:number){
         //1 set initial values
         if (stock.isChecked) {stock.isChecked = false;} else {stock.isChecked = true;}
-        //2
+        //2 map selected stocks array
         let stocksArray = this.stocksSelected.map(function (arrayItem) {return arrayItem.number;});
         let indexOfSelectedStock = stocksArray.indexOf(stock.number);
+        //3 set up local variable to array
         let myCheckboxes = this.myCheckboxes.toArray();
+        //4 set mat-stepper validation 
         const selectedStocks = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
 
 
         if (stock.isChecked) { 
-
+          //2 mark selected or unselected in mapped arrays
           this.stocksUnSelected[indexOfSelectedStock].isChecked = true;
           this.stocksSelected[indexOfSelectedStock].isChecked = true;
+          //3 mark local variable
           myCheckboxes[index].checked = true;
-
+          //4 mat-stepper validation
           selectedStocks.push(new FormControl(stock.isChecked));
         } else {
+          //2 mark selected or unselected in mapped arrays
           this.stocksUnSelected[indexOfSelectedStock].isChecked = false;
           this.stocksSelected[indexOfSelectedStock].isChecked = false;
+          //3 mark local variable
           myCheckboxes[index].checked = false;
-
+          //4 mat-stepper validation
           const i = selectedStocks.controls.findIndex(x => x.value === stock.selectable);
           selectedStocks.removeAt(i);
         }
