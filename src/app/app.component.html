@@ -1,8 +1,48 @@
-<app-header></app-header>
+<!-- <app-header></app-header> -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
 
-<div class="container-fluid">
-	<div class="row">
-		<!--<app-map style="width:100%;"></app-map> -->
-		<app-stocks-table></app-stocks-table> 
-	</div>
-</div>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+        <!-- <button mat-menu-item routerLink="/dispatch" (click)="page('Dispatch')">
+          <span>Dispatch</span>
+        </button> -->
+        <button mat-menu-item routerLink="/dispatch">
+          <span>Dispatch - Default</span>
+        </button>
+        <button mat-menu-item routerLink="/dispatch2">
+          <span>Dispatch - Local Data (MD)</span>
+        </button>
+        <button mat-menu-item routerLink="/dispatch3">
+          <span>Dispatch - HTTP Client (MD)</span>
+        </button>
+        <button mat-menu-item routerLink="/dispatch4">
+          <span>Dispatch - AngU Complete Ex</span>
+        </button>
+        <button mat-menu-item routerLink="/dispatch5">
+          <span>Dispatch - NGX Datatable</span>
+        </button>
+        <button mat-menu-item routerLink="/dispatch1">
+          <span>Dispatch - Cloud Firestore DB</span>
+        </button>
+        <button mat-menu-item routerLink="/settings">
+          <span>Settings</span>
+        </button>
+        
+<!--   	    <button mat-menu-item routerLink="/manage">
+  	      <span>Manage</span>
+  	    </button> -->
+  	    <button mat-menu-item routerLink="/stocks-table">
+  	      <span>POC</span>
+  	    </button>
+  	</mat-menu>
+
+    <span>{{title}}</span>
+
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

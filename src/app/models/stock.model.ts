@@ -1,7 +1,10 @@
 export interface Stock {
+    id?: number;
+    branchId?: number;
+
     branch?:string;
     number?:string;
-    due_date?:string;
+    due_date?:string; //timestamp
     loss_type?:string;
     status?:string;
     pickup_location?:string;
@@ -21,14 +24,14 @@ export interface Stock {
     stock_address?:string;
     tower?:string;
 
-    storage_end?:string;
-    total_payment_amount?:string;
-    total_hauling_amount?:string;
+    storage_end?:string; //timestamp
+    total_payment_amount?:number;
+    total_hauling_amount?:number;
     payment_type?:string;
     checks_payable_to?:string;
     dispatch_note?:string;
     destination?:string;
-    tow_zone?:string;
+    tow_zone?:number;
     mileage?:string;
     tow_type?:string;
 

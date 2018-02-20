@@ -1,0 +1,18 @@
+<div class="basic-container">
+	<mat-card>
+		<mat-form-field>
+			<input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="branchCtrl" [matAutocomplete]="auto">
+			<!-- <mat-autocomplete #auto="matAutocomplete" name="Branch" (optionSelected)="getBranchStocks($event.option.value)" [displayWith]="displayFn"> -->
+			<mat-autocomplete #auto="matAutocomplete" (optionSelected)="getBranch($event.option.value)" name="Branch" [displayWith]="displayFn">
+				<mat-option *ngFor="let branch of filteredBranches | async;" [value]="branch">
+					 {{ branch.name }}
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+
+		<i style="color:#999;">Set Your default Branch: {{branchName}} {{branchID}}</i>
+		<br><br><br>
+		<button mat-button routerLink="/dispatch">Go To Dispatch</button>
+		<button mat-button (click)="onClear()">Clear</button>
+	</mat-card>
+</div>
