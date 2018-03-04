@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule, ApplicationRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -16,6 +16,7 @@ import { Dispatch2Component } from './components/dispatch2/dispatch2.component';
 import { Dispatch3Component } from './components/dispatch3/dispatch3.component';
 import { Dispatch4Component } from './components/dispatch4/dispatch4.component';
 import { Dispatch5Component } from './components/dispatch5/dispatch5.component';
+import { FcSearchComponent } from './components/fc-search/fc-search.component';
 
 import { SettingsComponent } from './components/settings/settings.component';
 import { ManageComponent } from './components/manage/manage.component';
@@ -25,6 +26,7 @@ import { StocksServiceNoMattable } from './services/stocks.service-nomattable';
 import { StocksMockService } from './services/stocks-mock.service';
 import { StocksMockService2 } from './services/stocks-mock2.service';
 import { Dispatch1Service } from './services/dispatch1.service';
+import { FirecloudService } from './services/firecloud.service';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -57,6 +59,7 @@ export class MaterialModule {}
     Dispatch3Component,
     Dispatch4Component,
     Dispatch5Component,
+    FcSearchComponent,
     SettingsComponent,
     ManageComponent
   ],
@@ -83,10 +86,12 @@ export class MaterialModule {}
     DragulaService,
     StocksService,
     Dispatch1Service,
+    FirecloudService,
     StocksMockService,
     StocksMockService2,
     StocksServiceNoMattable,
   ],
+  schemas:  [ CUSTOM_ELEMENTS_SCHEMA ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

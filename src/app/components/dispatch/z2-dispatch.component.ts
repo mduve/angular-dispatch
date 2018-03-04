@@ -17,6 +17,8 @@ export class DispatchComponent {
     lat: number = 40;
     lng: number = -100;  
     zoom: number = 10;
+    //agm-map - Branch specific  
+    branchName: string = JSON.parse(window.localStorage.getItem('branchname'));
     branchId: number = JSON.parse(window.localStorage.getItem('branchid'));
     branchAddress: string = JSON.parse(window.localStorage.getItem('branchaddress'));
     branchLat: number = JSON.parse(window.localStorage.getItem('branchlat'));

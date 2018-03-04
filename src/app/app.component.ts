@@ -9,8 +9,4 @@ export class AppComponent {
 
   title: string = 'Dispatch';
 
-  // page(test) {
-  //   this.title = test;
-  // }
-
 }

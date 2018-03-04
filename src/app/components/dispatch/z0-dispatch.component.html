@@ -3,13 +3,12 @@
 	<mat-card> Branch: {{ branchName }} </mat-card>
 	
 	<mat-card>
-		<agm-map [latitude]="branchLat" [longitude]="branchLng" [zoom]=9 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
+		<agm-map [latitude]="branchLat" [longitude]="branchLng" [zoom]=8 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
 			<!-- 1 orig <agm-marker *ngFor="let stock of stocksUnSelected; let i = index" (markerClick)="selectStockMarker(stock, i)" [latitude]="stock.lat" [longitude]="stock.lng" [iconUrl]="stock.isChecked ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"></agm-marker> -->
 			<!-- 2 modified <agm-marker *ngFor="let stock of unselected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [iconUrl]="'../assets/pin-unselected.png'"></agm-marker><agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [iconUrl]="'../assets/pin-selected.png'"></agm-marker> --> 
-			<!-- <agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [iconUrl]="stock.isChecked ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"></agm-marker> -->
-			
-			<agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarker(stock, i)" [iconUrl]="stock.isChecked ? '../assets/pin-selected.png' : '../assets/pin-unselected.png'"></agm-marker>
- 			
+			<agm-marker *ngFor="let stock of unselected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [iconUrl]="'../assets/pin-unselected.png'"></agm-marker>
+			<agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [iconUrl]="'../assets/pin-selected.png'"></agm-marker>
+
  			<agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.png'"></agm-marker>
 			<agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
 		</agm-map>
@@ -39,7 +38,10 @@
 					let-allRowsSelected="allRowsSelected" 
 					let-selectFn="selectFn">
 
-					<mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);selAllCheckboxes(allRowsSelected)"></mat-checkbox>
+					<mat-checkbox 
+						[checked]="allRowsSelected" 
+						(change)="selectFn(!allRowsSelected)">
+					</mat-checkbox>
 
 				</ng-template> 
 
@@ -51,8 +53,11 @@
 					let-rowIndex="rowIndex" 
 					let-row="row">
 
-					<mat-checkbox #myCheckbox [checked]="isSelected" (change)="onCheckboxChangeFn($event);selCheckbox(rowIndex)"></mat-checkbox> 
-					<!-- <mat-checkbox #myCheckbox [checked]="isChecked" (change)="onCheckboxChangeFn($event);selCheckbox(rowIndex)"></mat-checkbox> -->
+					<mat-checkbox 
+						[checked]="isSelected" 
+						(change)="onCheckboxChangeFn($event);test(rowIndex);">	
+					</mat-checkbox> 
+					<!-- <mat-checkbox #myCheckbox [checked]="isChecked" (change)="selectStockMarker(row, rowIndex)></mat-checkbox> -->
 
 				</ng-template>
 			</ngx-datatable-column>
@@ -88,9 +93,9 @@
 				<li *ngFor='let sel of selected'> {{sel.number}} </li>
 				<li *ngIf="!selected?.length">No Selections</li>
 			</ul>
-			<h4>All Stocks <small>({{allStocks?.length}})</small></h4>
+			<h4>UnSelections <small>({{unselected?.length}})</small></h4>
 			<ul>
-				<li *ngFor='let sel of allStocks'> {{sel.number}} </li>
+				<li *ngFor='let sel of unselected'> {{sel.number}} </li>
 			</ul>
 		</div>
 	</mat-card>

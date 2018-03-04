@@ -9,20 +9,26 @@ import { AngularFirestore } from 'angularfire2/firestore';
 export class Dispatch5Component {
 
   branchName;
+  branchId;
+
   rows;
   columns;
   selected = [];
- 
+
   constructor(private afs: AngularFirestore) {
 
-    let storageValue = window.localStorage.getItem('name');
-    this.branchName = JSON.parse(storageValue);
+    let brNameValue = window.localStorage.getItem('branchname');
+    this.branchName = JSON.parse(brNameValue);
 
-    this.getData();
+    let brIdValue = window.localStorage.getItem('branchid');
+    this.branchId = JSON.parse(brIdValue);
+
+    this.getData(this.branchId);
   }
- 
-  getData() {
-    this.afs.collection('stocks').valueChanges().subscribe((stocks) => {
+
+
+  getData(branchdata) {
+    this.afs.collection('stocks', ref => ref.where("branchId", "==", branchdata)).valueChanges().subscribe((stocks) => {
       this.rows = stocks;
     })
   }
