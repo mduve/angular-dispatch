@@ -8,11 +8,13 @@
 				</mat-option>
 			</mat-autocomplete>
 		</mat-form-field>
-
+		<!-- <app-select-branch></app-select-branch> -->
 
 		<i style="color:#999;">Set Your default Branch: {{branchName}} {{branchId}}</i>
 		<br><br><br>
-		<button mat-button routerLink="/dispatch">Go To Dispatch</button>
+		<button mat-raised-button color="primary" routerLink="/dispatch6">Dispatch</button>
 		<button mat-button (click)="onClear()">Clear</button>
+
+		
 	</mat-card>
 </div>

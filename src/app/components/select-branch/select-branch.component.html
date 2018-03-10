@@ -1,6 +1,13 @@
-<select class="form-control" (change)="onSelectChange($event)">
-  <option value="">--- Select ---</option>
-  <option value="Charlotte">Charlotte</option>
-  <option value="Chicago">Chicago</option>
-  <option value="Dallas">Dallas</option>
-</select> 
+<mat-form-field>
+	<input type="text" placeholder="Pick a Branch" aria-label="Pick a Branch" matInput [formControl]="branchCtrl" [matAutocomplete]="auto">
+	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="getBranch($event.option.value)" name="Branch" [displayWith]="displayFn">
+		<mat-option *ngFor="let branch of filteredBranches | async;" [value]="branch">
+			 {{ branch.name }}
+		</mat-option>
+	</mat-autocomplete>
+	
+</mat-form-field>
+
+<button mat-raised-button color="primary" (click)="refresh()">Confirm</button>
+<button mat-button (click)="onClear()">Clear</button>
+

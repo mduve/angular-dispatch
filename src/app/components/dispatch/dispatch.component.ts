@@ -1,10 +1,6 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 
-//Services
-//import { FirecloudService } from '../../services/firecloud.service';
-
-
 @Component({
   selector: 'app-dispatch',
   templateUrl: './dispatch.component.html',
@@ -30,6 +26,7 @@ export class DispatchComponent {
     columns;
     selected = [];
     allStocks = [];
+    selectedStocks = [];
 
     isChecked: boolean;
     @ViewChildren("myCheckbox") private myCheckboxes : QueryList<any>;
@@ -66,40 +63,6 @@ export class DispatchComponent {
       } else {
         this.allStocks[index].isChecked = false;
       }
-
-      // console.log(row);
-      // console.log(index);
-      // console.log(this.myCheckboxes);
-      // this.myCheckboxes.forEach(cbInstance => console.log(cbInstance));
-      // console.log(this.myCheckboxes.toArray());
-      // console.log(this.myCheckboxes.map(cbInstance => cbInstance));
-
-      /////////////////////////////////
-
-      // for (var i = 0; i < this.myCheckboxes.length; i++) {
-      //   if (this.myCheckboxes[i].isChecked){
-      //     console.log('is checked');
-      //   } else {
-      //     console.log('is unchecked');
-      //   }
-      // }
-
-      //let cbarray = this.myCheckboxes.forEach(function(element) {
-        // if(element.checked){
-        //   console.log('checked' + ' ' + index);
-        //   //console.log(unsel[index]);
-        // } else {
-        //   console.log('unchecked' + ' ' + index);          
-        // }
-      //});
-
-      // let cbarray = this.myCheckboxes.toArray();
-      // if (!cbarray[index].isChecked){
-      //   this.allStocks[index].isChecked = true;
-      // } else {
-      //   this.allStocks[index].isChecked = false;
-      // }
-      // console.log(cbarray);
     }
 
     selAllCheckboxes(sel){
@@ -113,8 +76,6 @@ export class DispatchComponent {
     }
 
     selMarker(stock, index){
-      //console.log();
-
       let cbarray = this.myCheckboxes.map(cbInstance => cbInstance);
       if (stock.isChecked){
         cbarray[index].checked = false;
@@ -127,17 +88,11 @@ export class DispatchComponent {
 
     }
 
-    test(rowIndex){
-      //console.log(rowIndex);
-    };
     onSelect({ selected }) {
       //console.log('Select Event this.selected  ===>   ', this.selected);
     }
     onActivate(event) { 
       //console.log('Activate Event', event);
-    }
-
-    ngAfterViewInit(){      
     }
 
 
