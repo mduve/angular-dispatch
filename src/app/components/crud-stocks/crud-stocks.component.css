@@ -1,0 +1,13 @@
+.form {
+	font-size: 10px;
+	display: grid;grid-template-columns: 25% 25% 25% 25%;grid-template-rows: auto;
+}
+.form input {
+	width:80%;
+	margin:10px 20% 10px 0;
+}
+.list {
+    font-size: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}

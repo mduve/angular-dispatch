@@ -1,0 +1,118 @@
+<app-toolbar></app-toolbar>
+
+<div class="basic-container">
+	<mat-card> CRUD Stocks works!</mat-card> 
+	<mat-card>
+		<div class="form">
+			<label>Branch ID <input type="number" [(ngModel)]="sbranchId"></label>
+			<label>Check Payable <input type="text" [(ngModel)]="schecks_payable_to"></label>
+			<label>City <input type="text" [(ngModel)]="scity"></label>
+			<label>County <input type="text" [(ngModel)]="scounty"></label>
+			<label>Damage <input type="text" [(ngModel)]="sdamage"></label>
+			<label>Destination <input type="text" [(ngModel)]="sdestination"></label>
+			<label>Dispatch Note <input type="text" [(ngModel)]="sdispatch_note"></label>
+			<label>Draggable <input type="text" [(ngModel)]="sdraggable"></label>
+			<label>Due Date <input type="text" [(ngModel)]="sdue_date"></label>
+			<label>Latitude <input type="number" [(ngModel)]="slat"></label>
+			<label>Longitude <input type="number" [(ngModel)]="slng"></label>
+			<label>Loss Type <input type="text" [(ngModel)]="sloss_type"></label>
+			<label>Mileage <input type="text" [(ngModel)]="smileage"></label>
+			<label>Model Make <input type="text" [(ngModel)]="smodel_make"></label>
+			<label>Model Name <input type="text" [(ngModel)]="smodel_name"></label>
+			<label>Model Year <input type="text" [(ngModel)]="smodel_year"></label>
+			<label>Stock Number <input type="text" [(ngModel)]="snumber"></label>
+			<label>Payment Type <input type="text" [(ngModel)]="spayment_type"></label>
+			<label>Pickup Location <input type="text" [(ngModel)]="spickup_location"></label>
+			<label>Priority <input type="text" [(ngModel)]="spriority"></label>
+			<label>Provider Name <input type="text" [(ngModel)]="sprovider_name"></label>
+			<label>Salvage Provider <input type="text" [(ngModel)]="ssalvage_provider"></label>
+			<label>State <input type="text" [(ngModel)]="sstate"></label>
+			<label>Status <input type="text" [(ngModel)]="sstatus"></label>
+			<label>Stock Address <input type="text" [(ngModel)]="sstock_address"></label>
+			<label>Storage End <input type="text" [(ngModel)]="sstorage_end"></label>
+			<label>Total Hauling Amount <input type="text" [(ngModel)]="stotal_hauling_amount"></label>
+			<label>Total Payment Amount <input type="text" [(ngModel)]="stotal_payment_amount"></label>
+			<label>Tow Type <input type="text" [(ngModel)]="stow_type"></label>
+			<label>Tow Zone <input type="text" [(ngModel)]="stow_zone"></label>
+			<label>Towable <input type="text" [(ngModel)]="stowable"></label>
+			<label>Tower <input type="text" [(ngModel)]="stower"></label>
+			<label>Zip Code <input type="text" [(ngModel)]="szip_code"></label>
+		</div>
+
+		<button (click)="add()">Add</button>
+		 
+		<h1>List of data</h1>
+		<div class="list">
+			<div *ngFor="let stock of stockobs | async">
+				<ng-template *ngIf="stock.branchId == 4;then content"></ng-template>
+
+				<ng-template #content>
+					<p>Branch Id - <strong>{{stock.branchId}}</strong></p>
+					<p>Checks Payable to - <strong>{{stock.checks_payable_to}}</strong></p>
+					<p>City - <strong>{{ stock.city }}</strong></p>
+					<p>County - <strong>{{ stock.county }}</strong></p>
+					<p>Damage - <strong>{{ stock.damage }}</strong></p>
+					<p>Destination - <strong>{{ stock.destination }}</strong></p>
+					<p>Dispatch Note - <strong>{{ stock.dispatch_note }}</strong></p>
+					<p>Draggable - <strong>{{ stock.draggable }}</strong></p>
+					<p>Due Date - <strong>{{ stock.due_date }}</strong></p>
+					<p>Latitude - <strong>{{ stock.lat }}</strong></p>
+					<p>Longitude - <strong>{{ stock.lng }}</strong></p>
+					<p>Loss Type - <strong>{{ stock.loss_type }}</strong></p>
+					<p>Mileage - <strong>{{ stock.mileage }}</strong></p>
+					<p>Model: Make - <strong>{{ stock.model_make }}</strong></p>
+					<p>Model: Name - <strong>{{ stock.model_name }}</strong></p>
+					<p>Model: Year - <strong>{{ stock.model_year }}</strong></p>
+					<p>Stock # - <strong>{{ stock.number }}</strong></p>
+					<p>Payment Type - <strong>{{ stock.payment_type }}</strong></p>
+					<p>Pickup Location - <strong>{{ stock.pickup_location }}</strong></p>
+					<p>Priority - <strong>{{ stock.priority }}</strong></p>
+					<p>Provider Name - <strong>{{ stock.provider_name }}</strong></p>
+					<p>Salvage Provider - <strong>{{ stock.salvage_provider }}</strong></p>
+					<p>State - <strong>{{ stock.state }}</strong></p>
+					<p>Status - <strong>{{ stock.status }}</strong></p>
+					<p>Stock Address - <strong>{{ stock.stock_address }}</strong></p>
+					<p>Storage End - <strong>{{ stock.storage_end }}</strong></p>
+					<p>Total Hauling Amount - <strong>{{ stock.total_hauling_amount }}</strong></p>
+					<p>Total Payment Amount - <strong>{{ stock.total_payment_amount }}</strong></p>
+					<p>Tow Type - <strong>{{ stock.tow_type }}</strong></p>
+					<p>Tow Zone - <strong>{{ stock.tow_zone }}</strong></p>
+					<p>Towable - <strong>{{ stock.towable }}</strong></p>
+					<p>Tower - <strong>{{ stock.tower }}</strong></p>
+					<p>Zip Code - <strong>{{ stock.zip_code }}</strong></p>
+
+					<button (click)="update(stock)">Update</button>
+					<button (click)="delete(stock)">Delete</button>
+
+				</ng-template>
+			</div>
+		</div>
+
+	</mat-card>
+</div>
+
+
+
+
+<!-- <app-toolbar></app-toolbar>
+
+<div class="basic-container">
+	<mat-card> CRUD Stocks works!</mat-card> 
+	<mat-card>
+
+		<input type="text" [(ngModel)]="prodname">
+		<input type="text" [(ngModel)]="proddesc">
+		<button (click)="add()">Add</button>
+		 
+		<h1>List of data</h1>
+		<div *ngFor="let product of prodobs | async">
+			<p>Product name - {{product.productname}}</p>
+			<p>Product description - {{product.productdesc}}</p>
+
+			<button (click)="update(product)">Update</button>
+			<button (click)="delete(product)">Delete</button>
+		</div>
+
+	</mat-card>
+</div>
+ -->

@@ -1,3 +1,4 @@
+<app-toolbar></app-toolbar>
 <div class="basic-container">
 
 	<mat-card> Branch: {{ branchName }} </mat-card>
@@ -5,8 +6,7 @@
 
 	<mat-card>
 		<div style="width: 100%">
-	      <ngx-datatable
-	        class="material"
+	      <ngx-datatable class="material"
 		        [headerHeight]="50"
 		        [columnMode]="'force'"
 		        [rowHeight]="'auto'"
@@ -34,8 +34,7 @@
 
               	<mat-checkbox 
               		[checked]="allRowsSelected" 
-              		(change)="
-              			selectFn(!allRowsSelected)">
+              		(change)="selectFn(!allRowsSelected)">
               	</mat-checkbox>
 
               </ng-template>

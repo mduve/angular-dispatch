@@ -2,28 +2,31 @@ import { Component, ViewChildren, QueryList } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-dispatch6',
-  templateUrl: './dispatch6.component.html',
-  styleUrls: ['./dispatch6.component.css']
+  selector: 'app-dispatch',
+  templateUrl: './dispatch.component.html',
+  styleUrls: [
+    './dispatch.component.css', 
+    '../../../.././node_modules/dragula/dist/dragula.css'
+  ],
 })
-export class Dispatch6Component {
+export class DispatchComponent {
 
-	//agm-map
-	styles: object = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"administrative.neighborhood","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.business","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
-	lat: number = 40;
-	lng: number = -100;  
-	zoom: number = 10;
-	branchName: string = JSON.parse(window.localStorage.getItem('branchname'));
-	branchId: number = JSON.parse(window.localStorage.getItem('branchid'));
-	branchAddress: string = JSON.parse(window.localStorage.getItem('branchaddress'));
-	branchLat: number = JSON.parse(window.localStorage.getItem('branchlat'));
-	branchLng: number  = JSON.parse(window.localStorage.getItem('branchlng'));
+  //agm-map
+  styles: object = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"administrative.neighborhood","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.business","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
+  lat: number = 40;
+  lng: number = -100;  
+  zoom: number = 10;
+  branchName: string = JSON.parse(window.localStorage.getItem('branchname'));
+  branchId: number = JSON.parse(window.localStorage.getItem('branchid'));
+  branchAddress: string = JSON.parse(window.localStorage.getItem('branchaddress'));
+  branchLat: number = JSON.parse(window.localStorage.getItem('branchlat'));
+  branchLng: number  = JSON.parse(window.localStorage.getItem('branchlng'));
   //ngx-grid
-	rows;
-	columns;
+  rows;
+  columns;
   //application
   selected = [];
   allStocks = [];
@@ -33,8 +36,14 @@ export class Dispatch6Component {
   //mat-stepper
   isLinear = true;
   firstFormGroup: FormGroup;
+  //toggle map
+  toggle:boolean = false;
+  buttonName:any = 'explore';
 
-	constructor(
+
+
+
+  constructor(
     private afs: AngularFirestore,
     private _formBuilder: FormBuilder
   ) { this.getData(this.branchId);}
@@ -97,7 +106,7 @@ export class Dispatch6Component {
       const i = validate.controls.findIndex(x => x.value === this.selected);
       validate.removeAt(i);
     }      
-  }	
+  }  
 
   selMarker(stock, index){
     let cbarray = this.myCheckboxes.map(cbInstance => cbInstance);
@@ -156,6 +165,13 @@ export class Dispatch6Component {
     } else {
       this.allCheckboxesSelected = true;
     }
+  }
+
+
+
+  toggleMap() {
+    this.toggle = !this.toggle;
+    if(this.toggle) this.buttonName = "list"; else this.buttonName = "explore";
   }
 
 

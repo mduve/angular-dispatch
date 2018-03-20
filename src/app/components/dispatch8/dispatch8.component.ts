@@ -6,12 +6,12 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 
 @Component({
-  selector: 'app-dispatch',
-  templateUrl: './dispatch.component.html',
-  styleUrls: ['./dispatch.component.css', 
+  selector: 'app-dispatch8',
+  templateUrl: './dispatch8.component.html',
+  styleUrls: ['./dispatch8.component.css', 
     '../../../.././node_modules/dragula/dist/dragula.css']
 })
-export class DispatchComponent {
+export class Dispatch8Component {
 
 
   //agm-map
@@ -97,7 +97,7 @@ export class DispatchComponent {
     this.allRowsSelectedListener();
     this.validation();
 
-    //console.log(this.selected);console.log(this.selAllStocks);
+    console.log(this.selected);console.log(this.selAllStocks);
 
   } 
 
