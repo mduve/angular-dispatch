@@ -28,9 +28,11 @@
 					<form>
 
 						<agm-map [latitude]="branchLat" [longitude]="branchLng" [zoom]=9 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
-							<agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOn(i);" [iconUrl]="'../assets/pin-unselected.png'"></agm-marker>
-							<agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOff(i);" [iconUrl]="'../assets/pin-selected.png'"></agm-marker>
-							<agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.png'"></agm-marker>
+							<!-- [label]="!toggle ? ' ' : 'A'" -->
+							<agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOn(i);" [iconUrl]="'../assets/pin-unselected.svg'"></agm-marker>
+							<!-- <agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [label]="!toggle ? ' ' : 'A'" (markerClick)="selMarkerOff(i);" [iconUrl]="'../assets/pin-selected.svg'"></agm-marker> -->
+							<agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [label]="!toggle ? ' ' : {color: '#fff',fontSize: '10px',text: ((i + 1)).toString()}" (markerClick)="selMarkerOff(i);" [iconUrl]="!toggle ? '../assets/pin-selected.svg' : '../assets/pin-selected-route.svg'"></agm-marker>
+							<agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.svg'"></agm-marker>
 							<agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
 						</agm-map>
 
@@ -87,7 +89,8 @@
 											<mat-checkbox 
 												[checked]="isSelected" 
 												(change)="
-													onCheckboxChangeFn($event)">
+													onCheckboxChangeFn($event);
+													validateOnSelect(!isSelected);">
 
 											</mat-checkbox>
 
@@ -116,7 +119,7 @@
 						<div [hidden]="!toggle">
 
 				            <p><strong>Start</strong> {{ branchAddress }}</p>
-				            <ol class="stocks" [dragula]='"another-bag"' [dragulaModel]='many'>
+				            <ol class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
 				                <li *ngFor="let stock of selected">
 				                  <a href="">{{stock.number}}</a> {{stock.storage_end}} {{stock.total_payment_amount}} {{stock.total_hauling_amount}} {{stock.payment_type}} {{stock.checks_payable_to}} {{stock.dispatch_note}} {{stock.destination}} {{stock.tow_zone}} {{stock.mileage}} {{stock.tow_type}}
 				                </li>

@@ -31,7 +31,7 @@ export class DispatchComponent {
   allRowsSelectedMod; //select all/none states
   selected = []; //ngx grid selected array
   allStocks = []; //custom array to denote all stocks
-  selAllStocks = []; //custom array to denote allStocks that are selected
+  selAllStocks = []; //custom array to denote stocks that are selected from allStocks 
   //mat-stepper
   isLinear = true;
   firstFormGroup: FormGroup;
@@ -39,8 +39,6 @@ export class DispatchComponent {
   //toggle map
   toggle:boolean = false;
   buttonName:any = 'explore';
-
-
 
 
   constructor(
@@ -51,7 +49,6 @@ export class DispatchComponent {
 
   ngOnInit() {
     this.validateStepper();
-
 
   }
 
@@ -71,14 +68,13 @@ export class DispatchComponent {
     }    
   }  
 
-
+  //toggle map states
   toggleMap() {
     this.toggle = !this.toggle;
     if(this.toggle) this.buttonName = "list"; else this.buttonName = "explore";
   }
 
-
-
+  // get stock data from branch selector
   getData(branchdata) {
     this.afs.collection('stocks', ref => ref.where("branchId", "==", branchdata)).valueChanges().subscribe((stocks) => {
       this.rows = stocks;
@@ -95,38 +91,31 @@ export class DispatchComponent {
       this.selAllStocks.length = 0;
     }
     this.allRowsSelectedListener();
-    this.validation();
 
     //console.log(this.selected);console.log(this.selAllStocks);
-
   } 
 
-  selMarkerOn(i) {
-    this.selAllStocks.push(this.allStocks[i]);   
+  selMarkerOn(index) {
+    this.selAllStocks.push(this.allStocks[index]);   
     this.selected = this.selAllStocks;
     this.rows = [...this.rows];
-
     this.allRowsSelectedListener();
-    this.validation();
+    this.validationPush();
     //console.log(this.selected);console.log(this.selAllStocks);
   }
 
-  selMarkerOff(i) {
-    if (i > -1) {
-        this.selAllStocks.splice(i, 1);
+  selMarkerOff(index) {
+    if (index > -1) {
+        this.selAllStocks.splice(index, 1);
     }
     this.selected = this.selAllStocks;
     this.rows = [...this.rows];
-
     this.allRowsSelectedListener();
-    this.validation();
-
+    this.validationRemove();
     //console.log(this.selected);console.log(this.selAllStocks);
   }
 
-
-  
-
+  // listen for when all the rows are selected/deselected
   allRowsSelectedListener() {
     if (this.selected.length == this.allStocks.length){
       this.allRowsSelectedMod = true;
@@ -134,22 +123,20 @@ export class DispatchComponent {
       this.allRowsSelectedMod = false;
     }
   }
-
-  selectFnMod(allRowsSelectedMod){
+  // when check all is checked, perform the following function
+  selectFnMod(allRowsSelectedMod){      
     if (allRowsSelectedMod) {
       this.selected.length, this.selAllStocks.length = 0;
       this.selected.push(...this.allStocks);
       this.selAllStocks = this.selected;
       this.rows = [...this.rows];
+      this.validateAll();
 
-      this.validation();
       //console.log(this.selected);console.log(this.selAllStocks);
-
     } else {
       this.selected.length, this.selAllStocks.length = 0;
       this.rows = [...this.rows];
-
-      this.validation();
+      this.validateNone();
       //console.log(this.selected);console.log(this.selAllStocks);      
     }
     if (this.allRowsSelectedMod) {
@@ -159,15 +146,41 @@ export class DispatchComponent {
     }
   }
 
-  validation(){
+
+  validationPush(){
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
-    if (this.selected.length > 0) {
-      validate.push(new FormControl(this.validated));
+    validate.push(new FormControl(this.selected));    
+    console.log(validate);
+  }
+  validationRemove(){
+    const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
+    const i = validate.controls.findIndex(x => x.value === this.selected);
+    validate.removeAt(i);
+    console.log(validate);
+  }
+  validateOnSelect(isSelected){
+    if (isSelected){
+      this.validationPush();
     } else {
-      const i = validate.controls.findIndex(x => x.value === this.validated);
-      validate.removeAt(i);    
+      this.validationRemove();
     }
-  }    
+  };
+  validateAll(){
+    const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
+    this.selected.forEach(function(marked){validate.removeAt(marked)});
+    this.selected.forEach(function(marked){validate.push(new FormControl(marked))});
+    console.log(validate);
+  }
+  validateNone(){
+    const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
+    this.allStocks.forEach(function(marked){validate.removeAt(marked)});
+    console.log(validate);
+  }
+
+  
+
+
+
 
 
 }

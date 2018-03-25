@@ -43,10 +43,8 @@
 		 
 		<h1>List of data</h1>
 		<div class="list">
-			<div *ngFor="let stock of stockobs | async">
-				<ng-template *ngIf="stock.branchId == 4;then content"></ng-template>
-
-				<ng-template #content>
+			<ng-container  *ngFor="let stock of stockobs | async">
+				<div *ngIf="stock.branchId == 4">
 					<p>Branch Id - <strong>{{stock.branchId}}</strong></p>
 					<p>Checks Payable to - <strong>{{stock.checks_payable_to}}</strong></p>
 					<p>City - <strong>{{ stock.city }}</strong></p>
@@ -84,8 +82,9 @@
 					<button (click)="update(stock)">Update</button>
 					<button (click)="delete(stock)">Delete</button>
 
-				</ng-template>
-			</div>
+				</div>
+
+			</ng-container>
 		</div>
 
 	</mat-card>
