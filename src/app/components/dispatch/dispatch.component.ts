@@ -1,8 +1,11 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatStepper } from '@angular/material';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
+
 
 
 @Component({
@@ -26,7 +29,10 @@ export class DispatchComponent {
   branchLng: number  = JSON.parse(window.localStorage.getItem('branchlng'));
   //ngx-grid
   rows;
-  columns;
+  columns = [{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'County' },{ name: 'Priority' },{ name: 'Salvage Provider' },];
+  allColumns = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'County' },{ name: 'City' },{ name: 'State' },{ name: 'Model Year' },{ name: 'Model Make' },{ name: 'Model Name' },{ name: 'Priority' },{ name: 'Salvage Provider' }];
+  columns2 = [{ prop: 'number', name: 'Number' }];
+  rows2;
   //ngx-grid -- selection arrays
   allRowsSelectedMod; //select all/none states
   selected = []; //ngx grid selected array
@@ -35,30 +41,52 @@ export class DispatchComponent {
   //mat-stepper
   isLinear = true;
   firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
   validated;
   //toggle map
   toggle:boolean = false;
   buttonName:any = 'explore';
 
+  drivers = [{value: 'tow-0', viewValue: 'Joes Towing'},{value: 'tow-1', viewValue: 'Mikes Towing'},{value: 'tow-2', viewValue: 'Johns Towing'}];
+
+  stockcollection: AngularFirestoreCollection<any> = this.afs.collection('stocks');
+  stockobs = this.stockcollection.valueChanges();
+
 
   constructor(
     private afs: AngularFirestore,
-    private _formBuilder: FormBuilder
-  ) { this.getData(this.branchId);}
+    private _formBuilder: FormBuilder,
+    private dragulaService: DragulaService
+  ) { 
+    this.getData(this.branchId);
+
+    dragulaService.drop.subscribe((value) => {
+      console.log('drop happened');
+      this.rows2 = [...this.selected];
+    });
+
+  }
+
 
 
   ngOnInit() {
-    this.validateStepper();
-
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: this._formBuilder.array([])}, 
+      { validator:this.checkIfChecked }
+    );
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
   }
 
-  //mat-stepper : set/reset
-  validateStepper(){
-      this.firstFormGroup = this._formBuilder.group({
-        firstCtrl: this._formBuilder.array([])}, 
-        { validator:this.checkIfChecked }
-      );
+  // get stock data from branch selector
+  getData(branchdata) {
+    this.afs.collection('stocks', ref => ref.where("branchId", "==", branchdata).where("status", "==", "Wait Dispatch")).valueChanges().subscribe((stocks) => {
+      this.rows = stocks;
+      this.allStocks.push(...stocks);
+    })
   }
+
   //mat-stepper
   checkIfChecked = (control: AbstractControl) => {
     if(control['controls'].firstCtrl.length == 0) {
@@ -68,19 +96,14 @@ export class DispatchComponent {
     }    
   }  
 
+
   //toggle map states
   toggleMap() {
     this.toggle = !this.toggle;
     if(this.toggle) this.buttonName = "list"; else this.buttonName = "explore";
   }
 
-  // get stock data from branch selector
-  getData(branchdata) {
-    this.afs.collection('stocks', ref => ref.where("branchId", "==", branchdata)).valueChanges().subscribe((stocks) => {
-      this.rows = stocks;
-      this.allStocks.push(...stocks);
-    })
-  }
+
 
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
@@ -91,8 +114,9 @@ export class DispatchComponent {
       this.selAllStocks.length = 0;
     }
     this.allRowsSelectedListener();
-
+    this.reviewStocksTable();
     //console.log(this.selected);console.log(this.selAllStocks);
+    
   } 
 
   selMarkerOn(index) {
@@ -101,6 +125,7 @@ export class DispatchComponent {
     this.rows = [...this.rows];
     this.allRowsSelectedListener();
     this.validationPush();
+    this.reviewStocksTable();
     //console.log(this.selected);console.log(this.selAllStocks);
   }
 
@@ -112,6 +137,7 @@ export class DispatchComponent {
     this.rows = [...this.rows];
     this.allRowsSelectedListener();
     this.validationRemove();
+    this.reviewStocksTable();
     //console.log(this.selected);console.log(this.selAllStocks);
   }
 
@@ -131,12 +157,13 @@ export class DispatchComponent {
       this.selAllStocks = this.selected;
       this.rows = [...this.rows];
       this.validateAll();
-
+      this.reviewStocksTable();
       //console.log(this.selected);console.log(this.selAllStocks);
     } else {
       this.selected.length, this.selAllStocks.length = 0;
       this.rows = [...this.rows];
       this.validateNone();
+      this.reviewStocksTable();
       //console.log(this.selected);console.log(this.selAllStocks);      
     }
     if (this.allRowsSelectedMod) {
@@ -146,17 +173,17 @@ export class DispatchComponent {
     }
   }
 
-
+  //validate first step
   validationPush(){
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     validate.push(new FormControl(this.selected));    
-    console.log(validate);
+    // console.log(validate);
   }
   validationRemove(){
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     const i = validate.controls.findIndex(x => x.value === this.selected);
     validate.removeAt(i);
-    console.log(validate);
+    // console.log(validate);
   }
   validateOnSelect(isSelected){
     if (isSelected){
@@ -169,18 +196,51 @@ export class DispatchComponent {
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     this.selected.forEach(function(marked){validate.removeAt(marked)});
     this.selected.forEach(function(marked){validate.push(new FormControl(marked))});
-    console.log(validate);
+    // console.log(validate);
   }
   validateNone(){
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     this.allStocks.forEach(function(marked){validate.removeAt(marked)});
-    console.log(validate);
+    // console.log(validate);
   }
 
-  
+  //toggle columns in filters
+  togglecol(col) {
+    const isChecked = this.isChecked(col);
 
+    if(isChecked) {
+      this.columns = this.columns.filter(c => { 
+        return c.name !== col.name; 
+      });
+    } else {
+      this.columns = [...this.columns, col];
+    }
+  }
 
+  isChecked(col) {
+    return this.columns.find(c => {
+      return c.name === col.name;
+    });
+  }
 
+  reviewStocksTable(){
+    this.rows2 = [...this.selected];
+  }
 
+  update() {
+    //console.log(this.selected);
+    let test = this.stockcollection;
+    
+    this.selected.forEach(function(happy){
+      test.doc(happy.stockid).update({
+        status: 'Wait Driver'
+      }).then(() => {
+        console.log('updated');
+      })
+    });
+  }
+  refresh() {
+    location.reload();
+  }
 
 }

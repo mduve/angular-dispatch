@@ -9,38 +9,38 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 export class CrudStocksComponent {
  
   sbranchId: number = 4;
-  schecks_payable_to: string = null;
+  schecksPayableTo: string = null;
   scity: string = "Brentwood";
   scounty: string = "Williamson";
   sdamage: string = "Theft";
   sdestination: string = "Nashville";
-  sdispatch_note: string = "lorem ipsum";
+  sdispatchNote: string = "lorem ipsum";
   sdraggable: boolean = false;
-  sdue_date: string = "12/14/2017";
+  sdueDate: string = "Thu Dec 14 2017 10:15:00 GMT-0600 (CST)";
   slat: number = 36.027906;
   slng: number = -86.774185;
-  sloss_type: string = null;
+  slossType: string = "Theft";
   smileage: number = 999999;
-  smodel_make: string = "Dodge";
-  smodel_name: string = "Magnum";
-  smodel_year: number = 1978;
+  smodelMake: string = "Dodge";
+  smodelName: string = "Magnum";
+  smodelYear: number = 1978;
   snumber: number = 123000;
-  spayment_type: string = null;
-  spickup_location: string = null;
+  spaymentType: string = null;
+  spickUpLocation: string = null;
   spriority: string = "VIC";
-  sprovider_name: string = "Geico";
-  ssalvage_provider: string = "";
+  sproviderName: string = "Geico";
+  ssalvageProvider: string = "State Farm Insurance";
   sstate: string = "TN";
   sstatus: string = "Wait Dispatch";
-  sstock_address: string = null;
-  sstorage_end: string = null;
-  stotal_hauling_amount: number = null;
-  stotal_payment_amount: number = null;
-  stow_type: string = null;
-  stow_zone: number = null;
+  sstockAddress: string = null;
+  sstorageEnd: string = null;
+  stotalHaulingAmount: number = 0.00;
+  stotalPaymentAmount: number = 5.00;
+  stowType: string = null;
+  stowZone: number = null;
   stowable: boolean = null;
   stower: string = null;
-  szip_code: string = "37027";
+  szip: string = "37027";
 
 
 
@@ -53,38 +53,38 @@ export class CrudStocksComponent {
     this.stockcollection.add({
 
       branchId: this.sbranchId,
-      checks_payable_to: this.schecks_payable_to,
+      checksPayableTo: this.schecksPayableTo,
       city: this.scity,
       county: this.scounty,
       damage: this.sdamage,
       destination: this.sdestination,
-      dispatch_note: this.sdispatch_note,
+      dispatchNote: this.sdispatchNote,
       draggable: this.sdraggable,
-      due_date: this.sdue_date,
+      dueDate: this.sdueDate,
       lat: this.slat,
       lng: this.slng,
-      loss_type: this.sloss_type,
+      lossType: this.slossType,
       mileage: this.smileage,
-      model_make: this.smodel_make,
-      model_name: this.smodel_name,
-      model_year: this.smodel_year,
+      modelMake: this.smodelMake,
+      modelName: this.smodelName,
+      modelYear: this.smodelYear,
       number: this.snumber,
-      payment_type: this.spayment_type,
-      pickup_location: this.spickup_location,
+      paymentType: this.spaymentType,
+      pickUpLocation: this.spickUpLocation,
       priority: this.spriority,
-      provider_name: this.sprovider_name,
-      salvage_provider: this.ssalvage_provider,
+      providerName: this.sproviderName,
+      salvageProvider: this.ssalvageProvider,
       state: this.sstate,
       status: this.sstatus,
-      stock_address: this.sstock_address,
-      storage_end: this.sstorage_end,
-      total_hauling_amount: this.stotal_hauling_amount,
-      total_payment_amount: this.stotal_payment_amount,
-      tow_type: this.stow_type,
-      tow_zone: this.stow_zone,
+      stockAddress: this.sstockAddress,
+      storageEnd: this.sstorageEnd,
+      totalHaulingAmount: this.stotalHaulingAmount,
+      totalPaymentAmount: this.stotalPaymentAmount,
+      towType: this.stowType,
+      towZone: this.stowZone,
       towable: this.stowable,
       tower: this.stower,
-      zip_code: this.szip_code,
+      zip: this.szip,
 
     }).then((docRef) => {
       this.stockcollection.doc(docRef.id).update({
@@ -97,11 +97,20 @@ export class CrudStocksComponent {
   }
 
   update(stock) {
-    this.stockcollection.doc(stock.stockid).update({
-      status: 'Wait Driver'
-    }).then(() => {
-      console.log('updated');
-    })
+    if (stock.status === 'Wait Dispatch'){
+      this.stockcollection.doc(stock.stockid).update({
+        status: 'Wait Driver'
+      }).then(() => {
+        console.log('updated');
+      })
+    }else{
+      this.stockcollection.doc(stock.stockid).update({
+        status: 'Wait Dispatch'
+      }).then(() => {
+        console.log('updated');
+      })
+
+    }
   }
  
   delete(stock) {
