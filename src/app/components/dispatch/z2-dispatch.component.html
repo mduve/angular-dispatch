@@ -28,33 +28,33 @@
 				<strong><mat-icon color="accent">flag</mat-icon> {{ branchName }}</strong> <a style="font-size: 12px;" routerLink="/settings">Change</a>
 			</mat-card> -->
 
-			<mat-horizontal-stepper [linear]="isLinear" #stepper [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
+			<!-- <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper" (selectionChange)="doSomething($event)"> -->
+			<mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper" [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
 				<mat-step [stepControl]="firstFormGroup">
 					<ng-template matStepLabel>Select Stocks &amp; Route</ng-template>
 
 					<form>
 
-						<agm-map [style.display]="isDivVisible ? 'none' : 'block'" [latitude]="branchLat" [longitude]="branchLng" [zoom]=9 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
+						<agm-map [latitude]="branchLat" [longitude]="branchLng" [zoom]=9 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
 							<agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOn(i);" [iconUrl]="'../assets/pin-unselected.svg'"></agm-marker>
 							<agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [label]="!toggle ? ' ' : {color: '#fff',fontSize: '10px',text: ((i + 1)).toString()}" (markerClick)="selMarkerOff(i);" [iconUrl]="!toggle ? '../assets/pin-selected.svg' : '../assets/pin-selected-route.svg'"></agm-marker>
 							<agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.svg'"></agm-marker>
 							<agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
 						</agm-map>
 
-
-						<div class="branch-name">{{ branchName }}
-							<div class="map-button-container">
-								<button  (click)="sidenav.open()" mat-icon-button mat-raised-button color="primary">
-									<mat-icon aria-label="filter stocks">filter_list</mat-icon>
-								</button>
-								<button (click)="toggleMap()" mat-icon-button mat-raised-button color="primary">
-									<mat-icon aria-label="select and route stocks">{{buttonName}}</mat-icon>
-								</button>
-							</div>
+						<div class="map-button-container">
+							<button  (click)="sidenav.open()" mat-icon-button mat-raised-button color="primary">
+								<mat-icon aria-label="filter stocks">filter_list</mat-icon>
+							</button>
+							<button (click)="toggleMap()" mat-icon-button mat-raised-button color="primary">
+								<mat-icon aria-label="select and route stocks">{{buttonName}}</mat-icon>
+							</button>
 						</div>
 
+						<strong style="top: -25px;position: relative;">{{ branchName }}</strong>
+
 						<div [hidden]="toggle">
-							<ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="rows" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'>
+							<ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="rows" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'>							
 									<ngx-datatable-column [width]="60" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
 										<ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
 											<mat-checkbox [checked]="allRowsSelectedMod" (change)="selectFnMod(!allRowsSelectedMod)"></mat-checkbox>
@@ -73,7 +73,7 @@
 									</ngx-datatable-column>
 
 
- 									<ngx-datatable-column  prop="dueDate">
+ 									<ngx-datatable-column  prop="dueDate">	
 										<ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
 											<span (click)="sort()">Due Date</span>
 										</ng-template>
@@ -84,22 +84,22 @@
 
 									<!-- <ngx-datatable-column prop="due_date">
 										<ng-template let-column="column" ngx-datatable-header-template>Due Date</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value | date: 'MM/dd/yyyy'}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value | date: 'MM/dd/yyyy'}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="loss_type">
 										<ng-template let-column="column" ngx-datatable-header-template>Loss Type</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column name="Status">
 										<ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="pickup_location">
 										<ng-template let-column="column" ngx-datatable-header-template>Pickup Location</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="zip_code">
 										<ng-template let-column="column" ngx-datatable-header-template>Zip Code</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column name="County">
 										<ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
@@ -112,24 +112,24 @@
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="model_year">
 										<ng-template let-column="column" ngx-datatable-header-template>Year</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="model_make">
 										<ng-template let-column="column" ngx-datatable-header-template>Make</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="model_name">
 										<ng-template let-column="column" ngx-datatable-header-template>Model</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column>
 									<ngx-datatable-column name="Priority">
 										<ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="salvage_provider">
 										<ng-template let-column="column" ngx-datatable-header-template>Salvage Provider</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>							
 									</ngx-datatable-column> -->
-									<ngx-datatable-column *ngFor="let col of columns"
+									<ngx-datatable-column *ngFor="let col of columns" 
 									[name]="col.name">
 									</ngx-datatable-column>
 							</ngx-datatable>
@@ -137,14 +137,14 @@
 
 						<div [hidden]="!toggle">
 
-				            <mat-card><p><strong>Start</strong> {{ branchAddress }}</p></mat-card>
-				            <div class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
-				                <mat-card *ngFor="let stock of selected">
+				            <p><strong>Start</strong> {{ branchAddress }}</p>
+				            <ol class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
+				                <li *ngFor="let stock of selected">
 				                  <a href="">{{stock.number}}</a> {{stock.storage_end}} {{stock.total_payment_amount}} {{stock.total_hauling_amount}} {{stock.payment_type}} {{stock.checks_payable_to}} {{stock.dispatch_note}} {{stock.destination}} {{stock.tow_zone}} {{stock.mileage}} {{stock.tow_type}}
-				                </mat-card>
-				                <mat-card *ngIf="!selected?.length">No Selections</mat-card>
-				            </div>
-				            <mat-card><p><strong>Finish</strong> {{ branchAddress }}</p></mat-card>
+				                </li>
+				                <li *ngIf="!selected?.length">No Selections</li>
+				            </ol>
+				            <p><strong>Finish</strong> {{ branchAddress }}</p>
 
 				        </div>
 						<div class="button-row">
@@ -206,26 +206,12 @@
 							<ngx-datatable-column *ngFor="let col of columns2" [name]="col.name">
 							</ngx-datatable-column>
 
-					        <ngx-datatable-column name="Index" width="80">
-					          <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-					            <strong>{{rowIndex}}</strong>
-					          </ng-template>
-					        </ngx-datatable-column>
-
-							<ngx-datatable-column>
-								<ng-template let-value="value" let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-									<ng-container *ngIf="this.selected.length > 1">
-										<button mat-button (click)="selMarkerOff(rowIndex)">Remove</button>
-									</ng-container>
-								</ng-template>
-							</ngx-datatable-column>
-
 						</ngx-datatable>
 						<div class="button-row">
 							<button mat-raised-button matStepperPrevious>Back</button>
-							<button mat-raised-button color="primary" matStepperNext>Next</button>
+							<button mat-raised-button color="primary" matStepperNext>Submit</button>
 						</div>
-					</form>
+					</form>					
 
 				</mat-step>
 				<mat-step>
@@ -236,18 +222,18 @@
 					</mat-card>
 
 					<div class="button-row">
-						<!-- <button mat-raised-button color="primary" (click)="refresh()">Dispatch</button> -->
+						<button mat-raised-button color="primary" (click)="refresh()">Dispatch</button>
 						<!-- <button mat-raised-button routerLink="/dispatch">Dispatch</button> -->
 						<button mat-raised-button routerLink="/manage">Manage</button>
 						<!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-						<button mat-button (click)="resetStepper(stepper)">Dispatch Again</button>
+						<button mat-button (click)="resetStepper(stepper)">Reset</button>
 
 					</div>
 				</mat-step>
 
 			</mat-horizontal-stepper>
 
-		</ng-template>
+		</ng-template>	
 
 	</mat-sidenav-content>
 </mat-sidenav-container>

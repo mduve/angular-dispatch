@@ -1,8 +1,9 @@
-import { Component, ViewChildren, ViewChild, QueryList } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { FormControl, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { MatSidenav, MatStepper, MatHorizontalStepper } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatStepper } from '@angular/material';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { StepperSelectionEvent } from '@angular/cdk/stepper'; 
@@ -52,9 +53,6 @@ export class DispatchComponent {
   stockcollection: AngularFirestoreCollection<any> = this.afs.collection('stocks');
   stockobs = this.stockcollection.valueChanges();
 
-  @ViewChild('stepper') stepper: MatHorizontalStepper;
-
-  selectedIndex = 0;
 
   constructor(
     private afs: AngularFirestore,
@@ -229,54 +227,66 @@ export class DispatchComponent {
   }
 
 
-  // fire event when steps completed 
-  public selectionChange($event?: StepperSelectionEvent): void {
-
-    if (this.selectedDriver != null){
-      if ($event.selectedIndex == 2) {
-        let test = this.stockcollection;
-        this.selected.forEach(function(happy){
-          test.doc(happy.stockid).update({
-            status: 'Wait Driver'
-          }).then(() => {
-            console.log('updated');
-          })
-        });
-        this.selAllStocks.length = 0;
-        this.allRowsSelectedListener();
-        this.doEverything();
-        // don't allow user go back to step 1 or 2 from step 3
-        this.stepper._steps.forEach(step => step.editable = false);
-        this.stepper._steps.forEach(step => step.completed = true);
-      }
-      if ($event.selectedIndex == 0) return; // First step is still selected
-      this.selectedIndex = $event.selectedIndex;
-    }
+  //doSomething(this){
     //console.log(this);
+    // if (this.secondFormGroup.status == 'VALID') {
+    //   console.log('value');
+    //   let test = this.stockcollection;
+    //   this.selected.forEach(function(happy){
+    //     test.doc(happy.stockid).update({
+    //       status: 'Wait Driver'
+    //     }).then(() => {
+    //       console.log('updated');
+    //     })
+    //   });
+    //   this.selAllStocks.length = 0;
+    //   this.selectedDriver = null;
+    //   this.allRowsSelectedListener();
+    //   this.doEverything();
+
+    //   // need to remove validation to finish!!
+    //   // want to reset everything!!!
+    //   //this.validationRemove();
+    // }
+  //};
+
+
+
+  selectedIndex = 0;
+
+  public selectionChange($event?: StepperSelectionEvent): void {
+    // console.log('stepper.selectedIndex: ' + this.selectedIndex + '; $event.selectedIndex: ' + $event.selectedIndex);
+    if ($event.selectedIndex == 2) {
+      console.log('third step');
+      let test = this.stockcollection;
+      this.selected.forEach(function(happy){
+        test.doc(happy.stockid).update({
+          status: 'Wait Driver'
+        }).then(() => {
+          console.log('updated');
+        })
+      });
+      this.selAllStocks.length = 0;
+      this.selectedDriver = null;
+      this.allRowsSelectedListener();
+      this.doEverything();
+    }
+    if ($event.selectedIndex == 0) return; // First step is still selected
+
+    this.selectedIndex = $event.selectedIndex;
   }
 
-  // mat stepper reset 
+  public goto(index: number): void {
+    console.log('stepper.selectedIndex: ' + this.selectedIndex + '; goto index: ' + index);
+    if (index == 0) return; // First step is not selected anymore -ok    
+    this.selectedIndex = index;
+  }
+
   resetStepper(stepper: MatStepper){
-    //reset step labels/icons
-    this.stepper._steps.forEach(step => step.completed = false);
-    this.stepper._steps.forEach(step => step.editable = true);
-
-    //reset first step
-    const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
-    this.allStocks.forEach(function(marked){validate.removeAt(marked)});
-
-    //reset second step
-    this.secondFormGroup.reset();
-    
-    //go to step 1
-    stepper.selectedIndex = 0;
-
+    //stepper.selectedIndex = 0;
+    stepper._steps.forEach(step => step.editable = false);
   }
 
-  remove(test){
-    console.log(test);
-    console.log(this.rows2);
-  };
 
 
 }

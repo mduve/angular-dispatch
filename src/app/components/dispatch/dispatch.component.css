@@ -11,17 +11,31 @@ agm-map {
 }
 */
 
+.branch-name {
+  font-weight: 700;
+  padding: 15px;
+  margin: 0;
+  background: #fff;
+  z-index: 99;
+  /* position: absolute; */
+  width: 100%;
+  z-index: 1;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+
+}
+
 .map-button-container {
-    padding: 0 50px 0 0;
-    top: -15px;
-    position: relative;
-    background: #fff;
-    text-align: right;
+  overflow: visible;
+  height: 0;
+  float: right;
+  top: -14px;
+  position: relative;
+  right: 59px;
 }
 .map-button-container button {
     top: -20px;
     position: relative;
-    margin-right: 15px;    
+    margin-right: 15px;
 }
 
 
@@ -40,6 +54,16 @@ p, li {
     width:400px;
 }
 
-.button-row {margin-top: 25px;}
+mat-card,
+mat-expansion-panel,
+.button-row {margin: 15px;}
 
-
+/* .button-row {
+  position: fixed !important;
+  bottom: 0 !important;
+  background: #fff;
+  width: 100%;
+  left: 0;
+  padding: 15px;
+  margin: 0;
+} */
