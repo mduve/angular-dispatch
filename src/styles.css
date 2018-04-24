@@ -16,27 +16,24 @@ body.mat-app-background {
     margin:0;
 }
 
-
-
 body .mat-horizontal-content-container {
   padding: 0;
   background-color: #E1E2E1;
 }
-body .mat-horizontal-stepper-header-container,
-body .ngx-datatable.material {
+body .mat-horizontal-stepper-header-container {
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-}
-body .mat-horizontal-stepper-header-container{
   z-index: 9999999;
   background: #fff;
   background: #62717B;
   width: 100%;
   position: relative;
 }
+
 body .mat-step-header .mat-step-label.mat-step-label-active {
   color:#fff;
 }
-body .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
+body .mat-step-header .mat-step-label,
+body .mat-step-header .mat-step-optional {
   color: rgba(255, 255, 255, .38)
 }
 body .mat-step-header .mat-step-icon {
@@ -52,4 +49,32 @@ body .mat-step-header .mat-step-icon-not-touched {
 
 body .ngx-datatable.material {
   margin: 15px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+
+
+/* mobile view */
+
+app-toolbar {
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index: 999;
+}
+app-toolbar ~ * {
+  margin-top:4em;
+}
+
+body .mat-horizontal-stepper-header-container {
+  position: fixed;
+  top: 4em;
+}
+@media screen and (max-width: 600px){
+  body .mat-horizontal-stepper-header-container {
+    top: 3.5em;
+  }
+}
+body .mat-horizontal-stepper-header-container ~ * {
+  margin-top:8.5em;
 }

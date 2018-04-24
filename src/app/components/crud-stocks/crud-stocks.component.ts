@@ -7,7 +7,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
   styleUrls: ['./crud-stocks.component.css']
 })
 export class CrudStocksComponent {
- 
+
   sbranchId: number = 4;
   schecksPayableTo: string = null;
   scity: string = "Brentwood";
@@ -42,13 +42,23 @@ export class CrudStocksComponent {
   stower: string = null;
   szip: string = "37027";
 
-
-
+  stocks = [];
+  batches = [];
   stockcollection: AngularFirestoreCollection<any> = this.afs.collection('stocks');
+  batchcollection: AngularFirestoreCollection<any> = this.afs.collection('batches');
   stockobs = this.stockcollection.valueChanges();
- 
-  constructor(private afs: AngularFirestore) {}
- 
+  batchobs = this.batchcollection.valueChanges();
+
+  constructor(private afs: AngularFirestore) {
+    this.afs.collection('stocks', ref => ref.where("branchId", "==", 4)).valueChanges().subscribe((stocks) => {
+      this.stocks = stocks;
+    })
+    this.afs.collection('batches').valueChanges().subscribe((batches) => {
+      this.batches = batches;
+    })
+  }
+
+
   add(){
     this.stockcollection.add({
 
@@ -112,58 +122,25 @@ export class CrudStocksComponent {
 
     }
   }
- 
+
   delete(stock) {
     this.stockcollection.doc(stock.stockid).delete().then(() => {
       console.log('deleted');
     })
   }
-  
+
+  resetAllStocks(){
+    //console.log(this.stocks);
+    let stockCollection = this.stockcollection;
+    let batchCollection = this.batchcollection;
+    this.stocks.forEach(function(el){
+      stockCollection.doc(el.stockid).update({
+        status: 'Wait Dispatch',
+      })
+    });
+    this.batches.forEach(function(el){
+      batchCollection.doc(el.batchid).delete()
+    });
+  }
+
 }
-
-// import { Component } from '@angular/core';
-// import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-
-// @Component({
-//   selector: 'app-crud-stocks',
-//   templateUrl: './crud-stocks.component.html',
-//   styleUrls: ['./crud-stocks.component.css']
-// })
-// export class CrudStocksComponent {
- 
-//   prodname: string;
-//   proddesc: string;
-//   prodcollection: AngularFirestoreCollection<any> = this.afs.collection('products');
-//   prodobs = this.prodcollection.valueChanges();
- 
-//   constructor(private afs: AngularFirestore) {}
- 
-//   add(){
-//     this.prodcollection.add({
-//       productname: this.prodname,
-//       productdesc: this.proddesc
-//     }).then((docRef) => {
-//       this.prodcollection.doc(docRef.id).update({
-//         prodid: docRef.id
-//       })
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//   }
-
-//   update(prod) {
-//     this.prodcollection.doc(prod.prodid).update({
-//       productname: 'newprodname'
-//     }).then(() => {
-//       console.log('updated');
-//     })
-//   }
- 
-//   delete(prod) {
-//     this.prodcollection.doc(prod.prodid).delete().then(() => {
-//       console.log('deleted');
-//     })
-//   }
-  
-// }

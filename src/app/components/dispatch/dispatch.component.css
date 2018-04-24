@@ -3,21 +3,17 @@ agm-map {
     width: 100%;
 }
 
-/*.toggle-list-route {
-   position: absolute;
-    z-index: 9;
-    top: 17rem;
-    right: 4rem;
+
+.toggle-map {
+  visibility: hidden;
+  height: 0;
 }
-*/
 
 .branch-name {
-  font-weight: 700;
-  padding: 15px;
+  padding: 15px 35px;
   margin: 0;
   background: #fff;
   z-index: 99;
-  /* position: absolute; */
   width: 100%;
   z-index: 1;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
@@ -33,23 +29,25 @@ agm-map {
   right: 59px;
 }
 .map-button-container button {
-    top: -20px;
-    position: relative;
-    margin-right: 15px;
+  top: -20px;
+  position: relative;
+  margin-right: 15px;
 }
 
 
 p, li {
-    text-align: left;
-    padding: .9rem 1.2rem;
-    vertical-align: top;
-    border-top: 0;
-    color: rgba(0, 0, 0, 0.87);
-    transition: width 0.3s ease;
-    font-size: 14px;
-    font-weight: 400;
+  text-align: left;
+  padding: .9rem 1.2rem;
+  vertical-align: top;
+  border-top: 0;
+  color: rgba(0, 0, 0, 0.87);
+  transition: width 0.3s ease;
+  font-size: 14px;
+  font-weight: 400;
 }
-
+p {
+  padding: 0;
+}
 .mat-sidenav {
     width:400px;
 }
@@ -57,13 +55,3 @@ p, li {
 mat-card,
 mat-expansion-panel,
 .button-row {margin: 15px;}
-
-/* .button-row {
-  position: fixed !important;
-  bottom: 0 !important;
-  background: #fff;
-  width: 100%;
-  left: 0;
-  padding: 15px;
-  margin: 0;
-} */

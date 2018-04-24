@@ -1,7 +1,7 @@
 <app-toolbar></app-toolbar>
 
 <div class="basic-container">
-	<mat-card> CRUD Stocks works!</mat-card> 
+	<mat-card> CRUD Stocks works! <button (click)="resetAllStocks()">Reset all stocks</button></mat-card>
 	<mat-card>
 		<div class="form">
 			<label>Branch ID <input type="number" [(ngModel)]="sbranchId"></label>
@@ -40,7 +40,7 @@
 		</div>
 
 		<button (click)="add()">Add</button>
-		 
+
 		<h1>List of data</h1>
 		<div class="list">
 			<ng-container  *ngFor="let stock of stockobs | async">
@@ -89,29 +89,3 @@
 
 	</mat-card>
 </div>
-
-
-
-
-<!-- <app-toolbar></app-toolbar>
-
-<div class="basic-container">
-	<mat-card> CRUD Stocks works!</mat-card> 
-	<mat-card>
-
-		<input type="text" [(ngModel)]="prodname">
-		<input type="text" [(ngModel)]="proddesc">
-		<button (click)="add()">Add</button>
-		 
-		<h1>List of data</h1>
-		<div *ngFor="let product of prodobs | async">
-			<p>Product name - {{product.productname}}</p>
-			<p>Product description - {{product.productdesc}}</p>
-
-			<button (click)="update(product)">Update</button>
-			<button (click)="delete(product)">Delete</button>
-		</div>
-
-	</mat-card>
-</div>
- -->

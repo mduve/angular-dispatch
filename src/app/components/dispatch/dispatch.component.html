@@ -53,7 +53,7 @@
 							</div>
 						</div>
 
-						<div [hidden]="toggle">
+						<div [ngClass]="{'toggle-map': toggle, '': !toggle}">
 							<ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="rows" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'>
 									<ngx-datatable-column [width]="60" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
 										<ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
@@ -135,29 +135,31 @@
 							</ngx-datatable>
 						</div>
 
-						<div [hidden]="!toggle">
-
-				            <mat-card><p><strong>Start</strong> {{ branchAddress }}</p></mat-card>
-				            <div class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
-				                <mat-card *ngFor="let stock of selected">
-				                  <a href="">{{stock.number}}</a> {{stock.storage_end}} {{stock.total_payment_amount}} {{stock.total_hauling_amount}} {{stock.payment_type}} {{stock.checks_payable_to}} {{stock.dispatch_note}} {{stock.destination}} {{stock.tow_zone}} {{stock.mileage}} {{stock.tow_type}}
-				                </mat-card>
-				                <mat-card *ngIf="!selected?.length">No Selections</mat-card>
-				            </div>
-				            <mat-card><p><strong>Finish</strong> {{ branchAddress }}</p></mat-card>
-
-				        </div>
+						<div [ngClass]="{'toggle-map': !toggle, '': toggle}">
+		            <mat-card><p><strong>Start</strong> {{ branchAddress }}</p></mat-card>
+		            <div class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
+		                <mat-card *ngFor="let stock of selected">
+		                  <a href="">{{stock.number}}</a> {{stock.storage_end}} {{stock.total_payment_amount}} {{stock.total_hauling_amount}} {{stock.payment_type}} {{stock.checks_payable_to}} {{stock.dispatch_note}} {{stock.destination}} {{stock.tow_zone}} {{stock.mileage}} {{stock.tow_type}}
+		                </mat-card>
+		                <mat-card *ngIf="!selected?.length">No Selections</mat-card>
+		            </div>
+		            <mat-card><p><strong>Finish</strong> {{ branchAddress }}</p></mat-card>
+		        </div>
 						<div class="button-row">
 							<button mat-raised-button color="primary" matStepperNext>Next</button>
 						</div>
 
 					</form>
 				</mat-step>
+
 				<mat-step [stepControl]="secondFormGroup">
 					<form [formGroup]="secondFormGroup">
 						<ng-template matStepLabel>Assign Tower</ng-template>
 						<mat-card>
-							Tower Information<br>
+							<span>Batch {{batchNum}}</span>
+						</mat-card>
+						<mat-card>
+							<span>Tower Information</span><br><br>
 							<mat-form-field>
 								<mat-select [(value)]="selectedDriver" placeholder="Select a Tower" formControlName="secondCtrl"  required>
 									<mat-option>None</mat-option>
@@ -240,7 +242,7 @@
 						<!-- <button mat-raised-button routerLink="/dispatch">Dispatch</button> -->
 						<button mat-raised-button routerLink="/manage">Manage</button>
 						<!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-						<button mat-button (click)="resetStepper(stepper)">Dispatch Again</button>
+						<button mat-raised-button color="primary" (click)="resetStepper(stepper)">Dispatch Again</button>
 
 					</div>
 				</mat-step>

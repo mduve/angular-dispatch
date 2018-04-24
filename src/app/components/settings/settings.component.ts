@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit {
       this.branchLng = JSON.parse(brLngValue);
       this.branchZoom = JSON.parse(brZoomValue);
       this.branchAddress = JSON.parse(brAddressValue);
-        
+
     }
 
     displayFn(b): string {
@@ -147,5 +147,3 @@ export class SettingsComponent implements OnInit {
     }
 
 }
-
-
