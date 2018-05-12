@@ -8,6 +8,8 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 })
 export class CrudStocksComponent {
 
+  title = "CRUD Stocks"
+
   sbranchId: number = 4;
   schecksPayableTo: string = null;
   scity: string = "Brentwood";

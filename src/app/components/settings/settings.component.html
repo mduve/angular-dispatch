@@ -1,4 +1,4 @@
-<app-toolbar></app-toolbar>
+<app-toolbar [menuName]="title"></app-toolbar>
 <div class="basic-container">
 	<mat-card>
 		<mat-form-field>
@@ -16,6 +16,6 @@
 		<button mat-raised-button color="primary" routerLink="/dispatch">Dispatch</button>
 		<button mat-button (click)="onClear()">Clear</button>
 
-		
+
 	</mat-card>
 </div>

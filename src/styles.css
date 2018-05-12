@@ -3,17 +3,21 @@
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
 
 
+
+
 /*NEW PAGE STRUCTURE*/
 .basic-container {
-  padding:5px;
-  padding:25px;
+  padding:15px;
 }
 mat-card {
-  margin-bottom:10px;
+  margin-bottom:15px;
 }
 body.mat-app-background {
     background-color: #E1E2E1;
     margin:0;
+}
+body .mat-drawer-container {
+  background: transparent;
 }
 
 body .mat-horizontal-content-container {
@@ -70,11 +74,17 @@ body .mat-horizontal-stepper-header-container {
   position: fixed;
   top: 4em;
 }
+body .mat-horizontal-stepper-header-container ~ * {
+  margin-top:8.5em;
+}
 @media screen and (max-width: 600px){
+  app-toolbar ~ * {
+    margin-top:3.5em;
+  }
   body .mat-horizontal-stepper-header-container {
     top: 3.5em;
   }
-}
-body .mat-horizontal-stepper-header-container ~ * {
-  margin-top:8.5em;
+  body .mat-horizontal-stepper-header-container ~ * {
+    margin-top:8em;
+  }
 }

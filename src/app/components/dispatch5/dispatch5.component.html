@@ -1,4 +1,4 @@
-<app-toolbar></app-toolbar>
+<app-toolbar [menuName]="title"></app-toolbar>
 <div class="basic-container">
 
 	<mat-card> Branch: {{ branchName }} </mat-card>
@@ -19,34 +19,34 @@
 		        (activate)="onActivate($event)"
 		        (select)='onSelect($event)' >
 
-     	  <ngx-datatable-column 
-     	  	[width]="60" 
-     	  	[sortable]="false" 
-     	  	[canAutoResize]="false" 
-     	  	[draggable]="false" 
+     	  <ngx-datatable-column
+     	  	[width]="60"
+     	  	[sortable]="false"
+     	  	[canAutoResize]="false"
+     	  	[draggable]="false"
      	  	[resizeable]="false">
 
-              <ng-template 
-              	ngx-datatable-header-template 
-              	let-value="value" 
-              	let-allRowsSelected="allRowsSelected" 
+              <ng-template
+              	ngx-datatable-header-template
+              	let-value="value"
+              	let-allRowsSelected="allRowsSelected"
               	let-selectFn="selectFn">
 
-              	<mat-checkbox 
-              		[checked]="allRowsSelected" 
+              	<mat-checkbox
+              		[checked]="allRowsSelected"
               		(change)="selectFn(!allRowsSelected)">
               	</mat-checkbox>
 
               </ng-template>
 
-              <ng-template 
-              	ngx-datatable-cell-template 
-              	let-value="value" 
-              	let-isSelected="isSelected" 
+              <ng-template
+              	ngx-datatable-cell-template
+              	let-value="value"
+              	let-isSelected="isSelected"
               	let-onCheckboxChangeFn="onCheckboxChangeFn">
 
-              	<mat-checkbox 
-              		[checked]="isSelected" 
+              	<mat-checkbox
+              		[checked]="isSelected"
               		(change)="
               			onCheckboxChangeFn($event)">
 

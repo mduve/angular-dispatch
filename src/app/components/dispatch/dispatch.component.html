@@ -12,15 +12,17 @@
 
 	<mat-sidenav-content>
 
-		<app-toolbar></app-toolbar>
+		<app-toolbar [menuName]="title"></app-toolbar>
 
 		<div *ngIf="branchName == null;then content else other_content"></div>
 
 		<ng-template #content>
-			<mat-card>
-				<button mat-raised-button color="accent" routerLink="/settings"><span>Please go back to settings to select a Branch!</span></button>
-				<!-- <app-select-branch></app-select-branch> -->
-			</mat-card>
+			<div class="basic-container">
+				<mat-card>
+					<button mat-raised-button color="accent" routerLink="/settings"><span>Please go back to settings to select a Branch!</span></button>
+					<!-- <app-select-branch></app-select-branch> -->
+				</mat-card>
+			</div>
 		</ng-template>
 
 		<ng-template #other_content>
@@ -167,6 +169,13 @@
 										{{ driver.viewValue }}
 									</mat-option>
 								</mat-select>
+								<!-- <mat-select [(value)]="selectedDriver" placeholder="Select a Tower" formControlName="secondCtrl"  required>
+									<mat-option>None</mat-option>
+									<mat-option *ngFor="let driver of towerobs" [value]="driver.towername">
+										{{ driver.towername }}
+									</mat-option>
+								</mat-select> -->
+
 							</mat-form-field>
 						</mat-card>
 						<mat-accordion>
@@ -203,21 +212,104 @@
 							[columns]="columns2"
 							[headerHeight]="50"
 							[footerHeight]="50"
-							[rowHeight]="'auto'">
+							[rowHeight]="'auto'"
+							[columnMode]="'force'"
+							[count]="true"
+							[limit]="5">
 
-							<ngx-datatable-column *ngFor="let col of columns2" [name]="col.name">
+							<ngx-datatable-column *ngFor="let col of columns2" [name]="col.name"></ngx-datatable-column>
+
+					    <!-- <ngx-datatable-column name="Index" width="80">
+								<ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+					      	<strong>{{rowIndex}}</strong>
+								</ng-template>
+					    </ngx-datatable-column> -->
+							<ngx-datatable-column  prop="number" width="80">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Number</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value}}
+								</ng-template>
 							</ngx-datatable-column>
 
-					        <ngx-datatable-column name="Index" width="80">
-					          <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-					            <strong>{{rowIndex}}</strong>
-					          </ng-template>
-					        </ngx-datatable-column>
+							<ngx-datatable-column  prop="storageEnd">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Storage End</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value | date: 'MM/dd/yyyy'}}
+								</ng-template>
+							</ngx-datatable-column>
 
-							<ngx-datatable-column>
+							<ngx-datatable-column  prop="totalPaymentAmount">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Total Payment Amount</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value | currency}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column  prop="totalHaulingAmount">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Total Hauling Charges</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value | currency}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column  prop="paymentType">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Payment Type</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column  prop="dispatchNote">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Note</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column  prop="destination">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Destination</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column  prop="towZone">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Tow Zone</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column  prop="towType" width="80">
+								<ng-template let-column="column" ngx-datatable-header-template>
+									<span>Tow Type</span>
+								</ng-template>
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{value}}
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column width="120">
 								<ng-template let-value="value" let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 									<ng-container *ngIf="this.selected.length > 1">
-										<button mat-button (click)="selMarkerOff(rowIndex)">Remove</button>
+										<!-- <button mat-button (click)="selMarkerOff(rowIndex)"><mat-icon aria-label="clear">clear</mat-icon></button> -->
+										<span (click)="selMarkerOff(rowIndex)">Remove</span>
 									</ng-container>
 								</ng-template>
 							</ngx-datatable-column>

@@ -40,6 +40,8 @@ export interface Branch {
 
 export class SettingsComponent implements OnInit {
 
+    title = "Settings"
+
     branches: any = [];
     branchCtrl: FormControl = new FormControl();
     filteredBranches: Observable<any[]>;

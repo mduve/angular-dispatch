@@ -8,16 +8,18 @@ import { MatSidenav } from '@angular/material/sidenav';
   selector: 'app-dispatch7',
   templateUrl: './dispatch7.component.html',
   styleUrls: [
-    './dispatch7.component.css', 
+    './dispatch7.component.css',
     '../../../.././node_modules/dragula/dist/dragula.css'
   ],
 })
 export class Dispatch7Component {
 
+  title = "Dispatch Tow 7"
+
   //agm-map
   styles: object = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"administrative.neighborhood","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.business","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
   lat: number = 40;
-  lng: number = -100;  
+  lng: number = -100;
   zoom: number = 10;
   branchName: string = JSON.parse(window.localStorage.getItem('branchname'));
   branchId: number = JSON.parse(window.localStorage.getItem('branchid'));
@@ -58,7 +60,7 @@ export class Dispatch7Component {
   //mat-stepper : set/reset
   validateStepper(){
       this.firstFormGroup = this._formBuilder.group({
-        firstCtrl: this._formBuilder.array([])}, 
+        firstCtrl: this._formBuilder.array([])},
         { validator:this.checkIfChecked }
       );
   }
@@ -68,8 +70,8 @@ export class Dispatch7Component {
       return {notValid:true}
     } else {
       return null;
-    }    
-  }  
+    }
+  }
 
   getData(branchdata) {
     this.afs.collection('stocks', ref => ref.where("branchId", "==", branchdata).where("status", ">=", "Wait Dispatch").where("status", "<=", "Wait Off Site Tow Dispatch")).valueChanges().subscribe((stocks) => {
@@ -77,7 +79,7 @@ export class Dispatch7Component {
       //create unselected map markers
       this.allStocks.push(...stocks);
       this.allStocks.map(function(newprop) {
-        newprop.isChecked = false;   
+        newprop.isChecked = false;
         return newprop;
       });
     });
@@ -85,7 +87,7 @@ export class Dispatch7Component {
 
   selCheckbox(index){
     let cbarray = this.myCheckboxes.map(cbInstance => cbInstance);
-    //set mat-stepper validation 
+    //set mat-stepper validation
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     if (cbarray[index].checked){
       this.allStocks[index].isChecked = true;
@@ -105,12 +107,12 @@ export class Dispatch7Component {
       // 3 mat-stepper validation
       const i = validate.controls.findIndex(x => x.value === this.selected);
       validate.removeAt(i);
-    }      
-  }  
+    }
+  }
 
   selMarker(stock, index){
     let cbarray = this.myCheckboxes.map(cbInstance => cbInstance);
-    //set mat-stepper validation 
+    //set mat-stepper validation
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
 
     if (stock.isChecked){
@@ -138,7 +140,7 @@ export class Dispatch7Component {
 
 
   selCheckboxesAll(allCheckboxesSelected){
-    //set mat-stepper validation 
+    //set mat-stepper validation
     const validate = <FormArray>this.firstFormGroup.get('firstCtrl') as FormArray;
     //toggle state of checkboxes and map markers
     if (allCheckboxesSelected) {

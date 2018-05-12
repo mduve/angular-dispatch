@@ -1,10 +1,112 @@
-<app-toolbar></app-toolbar>
+<mat-sidenav-container class="example-container">
+	<mat-sidenav-content>
 
-<div class="basic-container">
-	<mat-card> manage works!</mat-card>
-	<mat-card>
-		<ul>
-			<li *ngFor="let batch of batches;">{{batch.batchNumber}} - {{batch.driver}}</li>
-		</ul>
-	</mat-card>
-</div>
+
+					<app-toolbar [menuName]="title"></app-toolbar>
+
+					<div *ngIf="branchDetail;then content else other_content"></div>
+
+					<ng-template #content>
+						<div class="toggle-view">
+							<mat-card>
+								<mat-slide-toggle disabled #view checked="true">{{!view.checked ? 'search' : 'list'}}</mat-slide-toggle> </mat-card>
+							<mat-card>
+								<div *ngIf="view.checked;then listView else searchView"></div>
+								<ng-template #listView>
+									<ul>
+										<li *ngFor="let batch of batches;" (click)="batchDet(batch)">{{batch.batchNumber}}</li>
+										<li *ngIf="!batches?.length">No Batches</li>
+									</ul>
+								</ng-template>
+								<ng-template #searchView>
+									<div>
+										<label>Select Stock or Batch</label>
+										<mat-radio-group>
+											<mat-radio-button value="1">Stock</mat-radio-button>
+											<mat-radio-button value="2">Branch</mat-radio-button>
+										</mat-radio-group>
+									</div>
+									<div>
+										<mat-form-field>
+											<input matInput placeholder="Enter Stock or Batch">
+										</mat-form-field>
+									</div>
+									<div>
+										<!-- <mat-select [(value)]="selected">
+									    <mat-option>None</mat-option>
+									    <mat-option value="option1">Reverse Dispatch</mat-option>
+									    <mat-option value="option2">Change Destination</mat-option>
+									    <mat-option value="option3">Logout</mat-option>
+									  </mat-select> -->
+									</div>
+									<mat-card-actions>
+								    <button mat-button>Search</button>
+								  </mat-card-actions>
+								</ng-template> </mat-card>
+						</div>
+					</ng-template>
+					<ng-template #other_content>
+						<div class="toggle-view">
+							<mat-card>
+								<span>Batch {{selBatchName}}</span> </mat-card>
+							<mat-card>
+								<span>Tower Information</span><br><br>
+								{{selBatchTower}} </mat-card>
+							<mat-accordion>
+								<mat-expansion-panel>
+									<mat-expansion-panel-header>
+										<mat-panel-title>Tow Package</mat-panel-title>
+										<mat-panel-description></mat-panel-description>
+									</mat-expansion-panel-header>
+									<p>I'm visible because I am open</p>
+								</mat-expansion-panel>
+								<mat-expansion-panel>
+									<mat-expansion-panel-header>
+										<mat-panel-title>Printer Destination</mat-panel-title>
+										<mat-panel-description></mat-panel-description>
+									</mat-expansion-panel-header>
+									<p>I'm visible because I am open</p>
+								</mat-expansion-panel> </mat-accordion>
+
+							<mat-card class="ngx-wrapper">
+								<ngx-datatable
+										class="material"
+										[headerHeight]="50"
+										[columnMode]="'force'"
+										[rowHeight]="'auto'"
+										[footerHeight]="50"
+										[count]="true"
+										[rows]="rows"
+										[limit]="5"
+										[selected]="selected"
+										[selectionType]="'checkbox'"
+										(select)='onSelect($event)'>
+
+										<ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+												<ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+													<mat-checkbox type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+												</ng-template>
+												<ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+													<mat-checkbox type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+												</ng-template>
+										</ngx-datatable-column>
+
+										<ngx-datatable-column name="Number">
+											<ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+										</ngx-datatable-column>
+										<ngx-datatable-column name="Status">
+											<ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+										</ngx-datatable-column>
+										<ngx-datatable-column *ngFor="let col of columns" [name]="col.name">
+										</ngx-datatable-column>
+								</ngx-datatable>
+							</mat-card>
+
+							<div class="button-row">
+								<button mat-raised-button color="primary" (click)="submitBatch()">Submit</button>
+								<button mat-raised-button (click)="test()">Search Again</button>
+							</div>
+						</div>
+					</ng-template>
+		</mat-sidenav-content>
+</mat-sidenav-container>

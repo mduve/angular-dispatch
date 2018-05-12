@@ -1,0 +1,11 @@
+
+.button-row,
+mat-accordion {margin: 15px 0;}
+
+
+.ngx-wrapper {padding:0;margin:15px 0;}
+.ngx-wrapper ngx-datatable {margin:0;}
+
+.toggle-view {
+  padding:15px;
+}

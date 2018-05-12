@@ -15,6 +15,8 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 })
 export class DispatchComponent {
 
+  title = "Dispatch Tow"
+
 
   //agm-map
   styles: object = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"administrative.neighborhood","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.business","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
@@ -26,12 +28,13 @@ export class DispatchComponent {
   branchAddress: string = JSON.parse(window.localStorage.getItem('branchaddress'));
   branchLat: number = JSON.parse(window.localStorage.getItem('branchlat'));
   branchLng: number  = JSON.parse(window.localStorage.getItem('branchlng'));
-  //ngx-grid
+  //ngx-grid 1
   rows;
-  columns = [{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'County' },{ name: 'Priority' },{ name: 'Salvage Provider' },];
+  columns = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'Priority' },{ name: 'Salvage Provider' },];
   allColumns = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'County' },{ name: 'City' },{ name: 'State' },{ name: 'Model Year' },{ name: 'Model Make' },{ name: 'Model Name' },{ name: 'Priority' },{ name: 'Salvage Provider' }];
-  columns2 = [{ prop: 'number', name: 'Number' }];
+  //ngx-grid 2
   rows2;
+  //columns2 = [{ prop: 'number', name: 'Number' },{ prop: 'storageEnd', name: 'Storage End' }];
   //ngx-grid -- selection arrays
   allRowsSelectedMod; //select all/none states
   selected = []; //ngx grid selected array
@@ -47,12 +50,15 @@ export class DispatchComponent {
   buttonName:any = 'explore';
 
   drivers = [{value: 'tow-0', viewValue: 'Joes Towing'},{value: 'tow-1', viewValue: 'Mikes Towing'},{value: 'tow-2', viewValue: 'Johns Towing'}];
+  // drivers = towerobs;
   selectedDriver;
 
   stockcollection: AngularFirestoreCollection<any> = this.afs.collection('stocks');
   batchcollection: AngularFirestoreCollection<any> = this.afs.collection('batches');
+  towercollection: AngularFirestoreCollection<any> = this.afs.collection('towers');
   stockobs = this.stockcollection.valueChanges();
   batchobs = this.batchcollection.valueChanges();
+  towerobs = this.towercollection.valueChanges();
 
 
   @ViewChild('stepper') stepper: MatHorizontalStepper;
@@ -79,7 +85,7 @@ export class DispatchComponent {
     })
 
     dragulaService.drop.subscribe((value) => {
-      console.log('drop happened');
+      //console.log('drop happened');
       this.doEverything();
     });
 
@@ -247,22 +253,21 @@ export class DispatchComponent {
     if (this.selectedDriver != null){
       if ($event.selectedIndex == 2) {
 
-        let stocksArray:any = [];
+        //let stocksArray:any = [];
         let stockCollection = this.stockcollection;
+        let batchNumber = this.batchNum;
+
         this.selected.forEach(function(el){
           stockCollection.doc(el.stockid).update({
+            batchNumber: batchNumber,
             status: 'Wait Driver',
           })
-          // .then(() => {
-          //   console.log('updated');
-          // })
-          //stocksArray.push(el.stockid);
-          stocksArray.push(el.number);
+          //stocksArray.push(el.number);
         });
         this.batchcollection.add({
           batchNumber: this.batchNum,
           driver: this.selectedDriver,
-          stocks: stocksArray,
+          //stocks: stocksArray,
         }).then((docRef) => {
           this.batchcollection.doc(docRef.id).update({
             batchid: docRef.id
@@ -270,8 +275,6 @@ export class DispatchComponent {
         }).catch((err) => {
           console.log(err);
         })
-
-
 
         this.selAllStocks.length = 0;
         this.allRowsSelectedListener();

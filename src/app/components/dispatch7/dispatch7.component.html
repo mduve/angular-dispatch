@@ -5,7 +5,7 @@
 
 	<mat-sidenav-content>
 
-		<app-toolbar></app-toolbar>
+		<app-toolbar [menuName]="title"></app-toolbar>
 
 		<div *ngIf="branchName == null;then content else other_content"></div>
 
@@ -50,36 +50,36 @@
 						<div [hidden]="toggle">
 							<!-- <ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="rows" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'> -->
 							<ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="rows" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'>
-									<ngx-datatable-column 
-										[width]="60" 
-										[sortable]="false" 
-										[canAutoResize]="false" 
-										[draggable]="false" 
+									<ngx-datatable-column
+										[width]="60"
+										[sortable]="false"
+										[canAutoResize]="false"
+										[draggable]="false"
 										[resizeable]="false">
 
-										<ng-template 
-											ngx-datatable-header-template 
-											let-value="value" 
-											let-allRowsSelected="allRowsSelected" 
+										<ng-template
+											ngx-datatable-header-template
+											let-value="value"
+											let-allRowsSelected="allRowsSelected"
 											let-selectFn="selectFn">
 
-											<mat-checkbox 
+											<mat-checkbox
 												[checked]="allCheckboxesSelected"
 												(change)="selCheckboxesAll(!allCheckboxesSelected)"></mat-checkbox>
 
 										</ng-template>
 
-										<ng-template 
-											ngx-datatable-cell-template 
-											let-value="value" 
-											let-isSelected="isSelected" 
+										<ng-template
+											ngx-datatable-cell-template
+											let-value="value"
+											let-isSelected="isSelected"
 											let-onCheckboxChangeFn="onCheckboxChangeFn"
-											let-rowIndex="rowIndex" 
+											let-rowIndex="rowIndex"
 											let-row="row">
 
-											<mat-checkbox 
+											<mat-checkbox
 												#myCheckbox
-												[checked]="isSelected" 
+												[checked]="isSelected"
 												(change)="
 													selCheckbox(rowIndex)">
 											</mat-checkbox>
@@ -91,7 +91,7 @@
 									</ngx-datatable-column>
 									<ngx-datatable-column prop="due_date">
 										<ng-template let-column="column" ngx-datatable-header-template>Due Date</ng-template>
-										<ng-template let-value="value" ngx-datatable-cell-template>{{value | date: 'MM/dd/yyyy'}}</ng-template>							
+										<ng-template let-value="value" ngx-datatable-cell-template>{{value | date: 'MM/dd/yyyy'}}</ng-template>
 									</ngx-datatable-column>
 									<ngx-datatable-column name="City">
 										<ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
@@ -125,13 +125,13 @@
 				</mat-step>
 				<mat-step>
 					<ng-template matStepLabel>Review</ng-template>
-					
+
 						<div style="display: flex">
 						  <div style="width:300px">
 					        <h4>Stocks selected <small>({{selected?.length}})</small></h4>
 					        <ul>
 					          <li *ngFor='let sel of selected'>
-					            {{sel.number}} 
+					            {{sel.number}}
 					          </li>
 					          <li *ngIf="!selected?.length">No Selections</li>
 					        </ul>
@@ -157,7 +157,7 @@
 				</mat-step>
 			</mat-horizontal-stepper>
 
-		</ng-template>	
+		</ng-template>
 
 	</mat-sidenav-content>
 </mat-sidenav-container>

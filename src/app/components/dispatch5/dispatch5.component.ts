@@ -8,6 +8,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 })
 export class Dispatch5Component {
 
+  title = "Dispatch Tow 5"
+
   branchName;
   branchId;
 
