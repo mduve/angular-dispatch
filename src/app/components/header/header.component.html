@@ -1,6 +1,24 @@
-<header>
-  <a routerLink="/"><i class="material-icons">home</i> Dispatch</a>
-<!--   <a routerLink="/list">list</a>
-  <a routerLink="/review">review</a> -->  
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
 
-</header>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+
+        <button mat-menu-item routerLink="/dispatch">
+           <span>Dispatch</span>
+        </button>
+        <button mat-menu-item routerLink="/manage">
+  	      <span>Manage</span>
+  	    </button>
+        <button mat-menu-item routerLink="/settings">
+          <span>Settings</span>
+        </button>
+  	</mat-menu>
+
+    <span>{{menuName}}</span>
+
+  </mat-toolbar-row>
+</mat-toolbar>

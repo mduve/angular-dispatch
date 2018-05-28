@@ -13,12 +13,17 @@ import { SelectBranchComponent } from './components/select-branch/select-branch.
 import { StocksTableComponent } from './components/stocks-table/stocks-table.component';
 import { DispatchComponent } from './components/dispatch/dispatch.component';
 
+import { DspComponent } from './components/dsp/dsp.component';
+import { DspmComponent } from './components/dspm/dspm.component';
+import { DspcComponent } from './components/dspc/dspc.component';
+
 import { SettingsComponent } from './components/settings/settings.component';
 import { ManageComponent } from './components/manage/manage.component';
 import { CrudStocksComponent } from './components/crud-stocks/crud-stocks.component';
 
 import { StocksService } from './services/stocks.service';
 import { FirecloudService } from './services/firecloud.service';
+import { FilterSideNavService } from './services/filter-side-nav.service';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -47,7 +52,10 @@ export class MaterialModule {}
     ManageComponent,
     SelectBranchComponent,
     ToolbarComponent,
-    CrudStocksComponent
+    CrudStocksComponent,
+    DspComponent,
+    DspmComponent,
+    DspcComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +80,7 @@ export class MaterialModule {}
     DragulaService,
     StocksService,
     FirecloudService,
+    FilterSideNavService
   ],
   bootstrap: [AppComponent]
 })

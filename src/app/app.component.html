@@ -1,3 +1,39 @@
-<!-- <app-header></app-header> -->
+<mat-sidenav-container>
+	<mat-sidenav #sidenav position="start">
+		<button mat-menu-item routerLink="/dispatch">
+			 <span>Dispatch</span>
+		</button>
+		<button mat-menu-item routerLink="/manage">
+			<span>Manage</span>
+		</button>
+		<button mat-menu-item routerLink="/settings">
+			<span>Settings</span>
+		</button>
+	</mat-sidenav>
 
-<router-outlet></router-outlet>
+	<mat-sidenav #filterColumnSidenav position="end">
+	  <button mat-button (click)="this.filterSideNavService.close()">Close</button>
+		<mat-list role="list" *ngFor='let col of this.filterSideNavService.allColumns'>
+	    <mat-list-item role="listitem">
+				<mat-checkbox [id]="col.name" (change)='this.filterSideNavService.togglecol(col)' [checked]='this.filterSideNavService.isChecked(col)'> <p>{{col.name}}</p> </mat-checkbox>
+	    </mat-list-item>
+	  </mat-list>
+	</mat-sidenav>
+
+	<mat-sidenav-content>
+		<!-- <app-header [menuName]="title"></app-header> -->
+		<mat-toolbar color="primary">
+		  <mat-toolbar-row>
+
+		    <button mat-icon-button (click)="sidenav.toggle()">
+		      <mat-icon>more_vert</mat-icon>
+		    </button>
+		    <span>{{title}}</span>
+
+		  </mat-toolbar-row>
+		</mat-toolbar>
+		<div class="page-container">
+    	<router-outlet (activate)="route()"></router-outlet>
+		</div>
+	</mat-sidenav-content>
+</mat-sidenav-container>

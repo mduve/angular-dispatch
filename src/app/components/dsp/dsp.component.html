@@ -1,0 +1,243 @@
+
+<div *ngIf="branchName == null;then content else other_content"></div>
+
+<ng-template #content>
+  <mat-card>
+    <button mat-raised-button color="accent" routerLink="/settings"><span>Please go back to settings to select a Branch!</span></button>
+  </mat-card>
+</ng-template>
+
+<ng-template #other_content>
+
+  <mat-horizontal-stepper [linear]="isLinear" #stepper [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
+
+    <mat-step [stepControl]="firstFormGroup">
+      <ng-template matStepLabel>Select Stocks &amp; Route</ng-template>
+
+      <form>
+
+        <agm-map [style.display]="isDivVisible ? 'none' : 'block'" [latitude]="branchLat" [longitude]="branchLng" [zoom]=9 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
+          <agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOn(i);" [iconUrl]="'../assets/pin-unselected.svg'"></agm-marker>
+          <agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [label]="!toggle ? ' ' : {color: '#fff',fontSize: '10px',text: ((i + 1)).toString()}" (markerClick)="selMarkerOff(i);" [iconUrl]="!toggle ? '../assets/pin-selected.svg' : '../assets/pin-selected-route.svg'"></agm-marker>
+          <agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.svg'"></agm-marker>
+          <agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
+        </agm-map>
+
+
+        <div class="branch-name">{{ branchName }}
+          <div class="map-button-container">
+            <button  (click)="toggleFilterColumnSidenav()" [style.display]="toggle ? 'none' : 'inline-block'" mat-icon-button mat-raised-button color="primary">
+              <mat-icon aria-label="filter stocks">filter_list</mat-icon>
+            </button>
+            <button (click)="toggleMap()" mat-icon-button mat-raised-button color="primary">
+              <mat-icon aria-label="select and route stocks">{{buttonName}}</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <mat-card class="ngx-wrapper" [ngClass]="{'toggle-map': toggle, '': !toggle}">
+          <ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="tableListRows" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'>
+              <ngx-datatable-column [width]="60" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+                <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                  <mat-checkbox [checked]="allRowsSelectedMod" (change)="selectFnMod(!allRowsSelectedMod)"></mat-checkbox>
+                </ng-template>
+
+                <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                  <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event);validateOnSelect(!isSelected);"></mat-checkbox>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Number">
+                <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+              </ngx-datatable-column>
+
+
+              <ngx-datatable-column  prop="dueDate">
+                <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                  <span (click)="sort()">Due Date</span>
+                </ng-template>
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  {{value | date: 'MM/dd/yyyy'}}
+                </ng-template>
+              </ngx-datatable-column>
+
+
+              <ngx-datatable-column *ngFor="let col of this.filterSideNavService.columns"
+              [name]="col.name">
+              </ngx-datatable-column>
+          </ngx-datatable>
+        </mat-card>
+
+        <div [ngClass]="{'toggle-map': !toggle, '': toggle}">
+            <mat-card><p><strong>Start</strong> {{ branchAddress }}</p></mat-card>
+            <div class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
+                <mat-card *ngFor="let stock of selected">
+                  <a href="">{{stock.number}}</a> {{stock.storage_end}} {{stock.total_payment_amount}} {{stock.total_hauling_amount}} {{stock.payment_type}} {{stock.checks_payable_to}} {{stock.dispatch_note}} {{stock.destination}} {{stock.tow_zone}} {{stock.mileage}} {{stock.tow_type}}
+                </mat-card>
+                <mat-card *ngIf="!selected?.length">No Selections</mat-card>
+            </div>
+            <mat-card><p><strong>Finish</strong> {{ branchAddress }}</p></mat-card>
+        </div>
+
+        <div class="button-row">
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Assign Tower</ng-template>
+        <mat-card>
+          <span>Batch {{batchNum}}</span>
+        </mat-card>
+        <mat-card>
+          <span>Tower Information</span><br><br>
+          <mat-form-field>
+            <mat-select [(value)]="selectedDriver" placeholder="Select a Tower" formControlName="secondCtrl"  required>
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let driver of drivers" [value]="driver.value">
+                {{ driver.viewValue }}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+        </mat-card>
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Tow Package</mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>I'm visible because I am open</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Printer Destination</mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>I'm visible because I am open</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-card class="ngx-wrapper">
+          <ngx-datatable class="material" [rows]="tableReviewRows" [columns]="columns2" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [count]="true" [limit]="5">
+
+            <ngx-datatable-column *ngFor="let col of columns2" [name]="col.name"></ngx-datatable-column>
+
+            <ngx-datatable-column  prop="number" width="80">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Number</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="storageEnd">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Storage End</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value | date: 'MM/dd/yyyy'}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="totalPaymentAmount">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Total Payment Amount</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value | currency}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="totalHaulingAmount">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Total Hauling Charges</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value | currency}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="paymentType">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Payment Type</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="dispatchNote">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Note</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="destination">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Destination</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="towZone">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Tow Zone</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="towType" width="80">
+              <ng-template let-column="column" ngx-datatable-header-template>
+                <span>Tow Type</span>
+              </ng-template>
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column width="120">
+              <ng-template let-value="value" let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                <ng-container *ngIf="this.selected.length > 1">
+                  <!-- <button mat-button (click)="selMarkerOff(rowIndex)"><mat-icon aria-label="clear">clear</mat-icon></button> -->
+                  <span (click)="selMarkerOff(rowIndex)">Remove</span>
+                </ng-container>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </mat-card>
+
+        <div class="button-row">
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Complete</ng-template>
+      <mat-card>
+        <h1>Congratulations</h1>
+        <p>You have succesfully dispatched a batch</p>
+      </mat-card>
+
+      <div class="button-row">
+        <button mat-raised-button routerLink="/manage">Manage</button>
+        <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Dispatch Again</button>
+
+      </div>
+    </mat-step>
+
+  </mat-horizontal-stepper>
+</ng-template>

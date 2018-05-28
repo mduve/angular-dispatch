@@ -1,0 +1,11 @@
+/*Dispatch*/
+agm-map {
+    height: 375px;
+    width: 100%;
+}
+
+.toggle-map {
+  visibility: hidden;
+  height: 0;
+  float:left;
+}

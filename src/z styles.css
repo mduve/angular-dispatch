@@ -1,0 +1,90 @@
+@import '~@swimlane/ngx-datatable/release/index.css';
+@import '~@swimlane/ngx-datatable/release/themes/material.css';
+@import '~@swimlane/ngx-datatable/release/assets/icons.css';
+
+
+
+
+/*NEW PAGE STRUCTURE*/
+.basic-container {
+  padding:15px;
+}
+mat-card {
+  margin-bottom:15px;
+}
+body.mat-app-background {
+    background-color: #E1E2E1;
+    margin:0;
+}
+body .mat-drawer-container {
+  background: transparent;
+}
+
+body .mat-horizontal-content-container {
+  padding: 0;
+  background-color: #E1E2E1;
+}
+body .mat-horizontal-stepper-header-container {
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  z-index: 9999999;
+  background: #fff;
+  background: #62717B;
+  width: 100%;
+  position: relative;
+}
+
+body .mat-step-header .mat-step-label.mat-step-label-active {
+  color:#fff;
+}
+body .mat-step-header .mat-step-label,
+body .mat-step-header .mat-step-optional {
+  color: rgba(255, 255, 255, .38)
+}
+body .mat-step-header .mat-step-icon {
+    background-color: white;
+    color: #37464f;
+}
+body .mat-step-header .mat-step-icon-not-touched {
+    background-color: rgba(255, 255, 255, .65);
+    color:rgba(0, 0, 0, 1);
+    color:#62717B;
+}
+
+
+body .ngx-datatable.material {
+  margin: 15px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+
+
+/* mobile view */
+
+app-toolbar {
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index: 999;
+}
+app-toolbar ~ * {
+  margin-top:4em;
+}
+
+body .mat-horizontal-stepper-header-container {
+  position: fixed;
+  top: 4em;
+}
+body .mat-horizontal-stepper-header-container ~ * {
+  margin-top:8.5em;
+}
+@media screen and (max-width: 600px){
+  app-toolbar ~ * {
+    margin-top:3.5em;
+  }
+  body .mat-horizontal-stepper-header-container {
+    top: 3.5em;
+  }
+  body .mat-horizontal-stepper-header-container ~ * {
+    margin-top:8em;
+  }
+}
