@@ -1,14 +1,22 @@
 <mat-sidenav-container>
 	<mat-sidenav #sidenav position="start">
-		<button mat-menu-item routerLink="/dispatch">
-			 <span>Dispatch</span>
-		</button>
-		<button mat-menu-item routerLink="/manage">
-			<span>Manage</span>
-		</button>
-		<button mat-menu-item routerLink="/settings">
-			<span>Settings</span>
-		</button>
+		<div class="sidebar-header header-cover">
+        <!-- Sidebar toggle button -->
+        <button mat-icon-button (click)="sidenav.close()">
+					<mat-icon aria-label="Close Sidenav">clear</mat-icon>
+				</button>
+        <!-- Sidebar brand image -->
+        <div class="sidebar-image mat-headline">MD</div>
+
+				<a class="sidebar-email mat-body-2">mduve@iaai.com</a>
+    </div>
+
+		<mat-nav-list>
+		  <a mat-list-item routerLink="/dispatch" (click)="sidenav.close()"><mat-icon>place</mat-icon> Dispatch </a>
+		  <a mat-list-item routerLink="/manage" (click)="sidenav.close()"><mat-icon>bookmark</mat-icon> Manage </a>
+		  <a mat-list-item routerLink="/settings" (click)="sidenav.close()"><mat-icon>settings</mat-icon> Settings </a>
+		</mat-nav-list>
+
 	</mat-sidenav>
 
 	<mat-sidenav #filterColumnSidenav position="end">
@@ -26,7 +34,7 @@
 		  <mat-toolbar-row>
 
 		    <button mat-icon-button (click)="sidenav.toggle()">
-		      <mat-icon>more_vert</mat-icon>
+		      <mat-icon>menu</mat-icon>
 		    </button>
 		    <span>{{title}}</span>
 

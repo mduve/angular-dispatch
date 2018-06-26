@@ -8,7 +8,7 @@
       <div *ngIf="view.checked;then listView else searchView"></div>
       <ng-template #listView>
         <ul>
-          <li *ngFor="let batch of batches;" (click)="batchDet(batch)">{{batch.batchNumber}}</li>
+          <li *ngFor="let batch of batches;" (click)="batchDet(batch)"><p><strong>{{batch.batchNumber}}</strong> {{batch.date | date :'medium' }}</p></li>
           <li *ngIf="!batches?.length">No Batches</li>
         </ul>
       </ng-template>
@@ -76,7 +76,7 @@
           [selectionType]="'checkbox'"
           (select)='onSelect($event)'>
 
-          <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+          <ngx-datatable-column [width]="60" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
               <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
                 <mat-checkbox type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
               </ng-template>
@@ -88,16 +88,56 @@
           <ngx-datatable-column name="Number">
             <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
           </ngx-datatable-column>
+
+          <ngx-datatable-column name="Pick Up Location">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Salvage Provider">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column  prop="dueDate">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+              <span (click)="sort()">Due Date</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              {{value | date: 'MM/dd/yyyy'}}
+            </ng-template>
+          </ngx-datatable-column>
+
           <ngx-datatable-column name="Status">
             <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
           </ngx-datatable-column>
+
+          <ngx-datatable-column name="Model Year">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Model Make">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Model Name">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Priority">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Towable">
+            <ng-template ngx-datatable-cell-template let-value="value">{{value}}</ng-template>
+          </ngx-datatable-column>
+
+
           <ngx-datatable-column *ngFor="let col of columns" [name]="col.name">
           </ngx-datatable-column>
       </ngx-datatable>
     </mat-card>
 
     <div class="button-row">
-      <button mat-raised-button color="primary" (click)="submitBatch()">Submit</button>
+      <button mat-raised-button color="accent" (click)="submitBatch()">Submit</button>
       <button mat-raised-button (click)="test()">Search Again</button>
     </div>
   </div>

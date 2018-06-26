@@ -51,6 +51,9 @@ export class DspComponent {
   drivers = [{value: 'tow-0', viewValue: 'Joes Towing'},{value: 'tow-1', viewValue: 'Mikes Towing'},{value: 'tow-2', viewValue: 'Johns Towing'}];
   // drivers = towerobs;
   selectedDriver;
+  batchedStocks = [];
+  createdAt:any = new Date();
+
 
   stockcollection: AngularFirestoreCollection<any> = this.afs.collection('stocks');
   batchcollection: AngularFirestoreCollection<any> = this.afs.collection('batches');
@@ -69,6 +72,7 @@ export class DspComponent {
     this.batchNum = Math.floor((Math.random() * 100000) + 1)
   }
 
+  showSpinner: boolean = true;
 
   constructor(
     private afs: AngularFirestore,
@@ -80,10 +84,10 @@ export class DspComponent {
     // get stock data from branch selector
     //this.afs.collection('stocks', ref => ref.where("branchId", "==", this.branchId).where("status", ">", "Wait Driver")).valueChanges().subscribe((stocks) => {
     this.afs.collection('stocks', ref => ref.where("branchId", "==", this.branchId).where("status", "<", "Wait Driver")).valueChanges().subscribe((stocks) => {
+      this.showSpinner = false;
       this.tableListRows = stocks;
       this.allStocks = stocks;
-    })
-
+    });
     dragulaService.drop.subscribe((value) => {
       this.doEverything();
     });
@@ -237,11 +241,14 @@ export class DspComponent {
   public selectionChange($event?: StepperSelectionEvent): void {
 
     if (this.selectedDriver != null){
+
       if ($event.selectedIndex == 2) {
 
         //let stocksArray:any = [];
         let stockCollection = this.stockcollection;
         let batchNumber = this.batchNum;
+
+        this.batchedStocks.push(...this.selected);
 
         this.selected.forEach(function(el){
           stockCollection.doc(el.stockid).update({
@@ -253,7 +260,9 @@ export class DspComponent {
         this.batchcollection.add({
           batchNumber: this.batchNum,
           driver: this.selectedDriver,
+          date: this.createdAt,
           //stocks: stocksArray,
+
         }).then((docRef) => {
           this.batchcollection.doc(docRef.id).update({
             batchid: docRef.id
@@ -269,12 +278,16 @@ export class DspComponent {
         this.stepper._steps.forEach(step => step.editable = false);
         this.stepper._steps.forEach(step => step.completed = true);
       }
-      if ($event.selectedIndex == 1) {this.newBatch()}
+      if ($event.selectedIndex == 1) {
+        this.newBatch();
+        this.batchedStocks = [];
+      }
       if ($event.selectedIndex == 0) return; // First step is still selected
       this.selectedIndex = $event.selectedIndex;
 
       // set list to true
       this.toggle = false;
+
     }
   }
 

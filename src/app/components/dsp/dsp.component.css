@@ -9,3 +9,13 @@ agm-map {
   height: 0;
   float:left;
 }
+
+
+
+
+.cb-cover {
+  width: 22px;height: 22px;background:#ff0000;position: absolute;opacity: .0;z-index: 999999;
+}
+.cb-cover + mat-checkbox {
+  position: absolute;z-index: 0;
+}

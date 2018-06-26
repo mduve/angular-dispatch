@@ -37,12 +37,14 @@
 
         <mat-card class="ngx-wrapper" [ngClass]="{'toggle-map': toggle, '': !toggle}">
           <ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="tableListRows" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'>
+          <!-- <ngx-datatable class="material" [headerHeight]="50" [columnMode]="'force'" [rowHeight]="'auto'" [footerHeight]="50" [count]="true" [rows]="tableListRows" [limit]="5" [selected]="selected" [selectionType]="'multiClick'" (select)='onSelect($event)'> -->
               <ngx-datatable-column [width]="60" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
                 <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
                   <mat-checkbox [checked]="allRowsSelectedMod" (change)="selectFnMod(!allRowsSelectedMod)"></mat-checkbox>
                 </ng-template>
 
                 <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                  <!-- <div class="cb-cover"></div> -->
                   <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event);validateOnSelect(!isSelected);"></mat-checkbox>
                 </ng-template>
               </ngx-datatable-column>
@@ -66,13 +68,20 @@
               [name]="col.name">
               </ngx-datatable-column>
           </ngx-datatable>
+          <mat-spinner class="mat-spinner" *ngIf="showSpinner" color="accent"></mat-spinner>
         </mat-card>
 
         <div [ngClass]="{'toggle-map': !toggle, '': toggle}">
             <mat-card><p><strong>Start</strong> {{ branchAddress }}</p></mat-card>
             <div class="stocks" [dragula]='"routed-stocks"' [dragulaModel]='selected'>
                 <mat-card *ngFor="let stock of selected">
-                  <a href="">{{stock.number}}</a> {{stock.storage_end}} {{stock.total_payment_amount}} {{stock.total_hauling_amount}} {{stock.payment_type}} {{stock.checks_payable_to}} {{stock.dispatch_note}} {{stock.destination}} {{stock.tow_zone}} {{stock.mileage}} {{stock.tow_type}}
+                  <strong>{{stock.number}}</strong>
+                  Towable: {{stock.towable}},
+                  {{stock.destination}}
+                  {{stock.stockAddress}}
+
+                  <!-- {{stock.storageEnd}} {{stock.totalPaymentAmount}} {{stock.totalHaulingAmount}} {{stock.paymentType}} {{stock.checksPayableTo}} {{stock.dispatchNote}} {{stock.destination}} {{stock.towZone}} {{stock.mileage}} {{stock.towType}} -->
+
                 </mat-card>
                 <mat-card *ngIf="!selected?.length">No Selections</mat-card>
             </div>
@@ -80,7 +89,7 @@
         </div>
 
         <div class="button-row">
-          <button mat-raised-button color="primary" matStepperNext>Next</button>
+          <button mat-raised-button color="accent" matStepperNext>Next</button>
         </div>
 
       </form>
@@ -219,8 +228,8 @@
         </mat-card>
 
         <div class="button-row">
+          <button mat-raised-button color="accent" matStepperNext>Next</button>
           <button mat-raised-button matStepperPrevious>Back</button>
-          <button mat-raised-button color="primary" matStepperNext>Next</button>
         </div>
       </form>
     </mat-step>
@@ -228,15 +237,24 @@
     <mat-step>
       <ng-template matStepLabel>Complete</ng-template>
       <mat-card>
-        <h1>Congratulations</h1>
-        <p>You have succesfully dispatched a batch</p>
+        <!-- <mat-card-header>
+          <mat-card-title></mat-card-title>
+          <mat-card-subtitle></mat-card-subtitle>
+        </mat-card-header> -->
+        <mat-card-content>
+          <h2>Congratulations</h2>
+          <p>You have succesfully dispatched batch #{{batchNum}} at {{ createdAt | date :'medium'  }}</p>
+          <p>Stocks:</p>
+          <ul>
+            <li *ngFor="let stock of batchedStocks;"><p>{{stock.number}}</p></li>
+          </ul>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Dispatch</button>
+          <button mat-button routerLink="/manage">Manage</button>
+        </mat-card-actions>
       </mat-card>
 
-      <div class="button-row">
-        <button mat-raised-button routerLink="/manage">Manage</button>
-        <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Dispatch Again</button>
-
-      </div>
     </mat-step>
 
   </mat-horizontal-stepper>

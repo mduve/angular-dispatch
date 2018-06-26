@@ -28,8 +28,8 @@ export class FilterSideNavService {
   }
 
   //app.component
-  public columns:any = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'Priority' },{ name: 'Salvage Provider' }];
-  public allColumns = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pickup Location' },{ name: 'Zip' },{ name: 'County' },{ name: 'City' },{ name: 'State' },{ name: 'Model Year' },{ name: 'Model Make' },{ name: 'Model Name' },{ name: 'Priority' },{ name: 'Salvage Provider' }];
+  public columns:any = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pick Up Location' },{ name: 'Zip' },{ name: 'Priority' },{ name: 'Salvage Provider' }];
+  public allColumns = [{ name: 'Loss type' },{ name: 'Status' },{ name: 'Pick Up Location' },{ name: 'Zip' },{ name: 'County' },{ name: 'City' },{ name: 'State' },{ name: 'Model Year' },{ name: 'Model Make' },{ name: 'Model Name' },{ name: 'Priority' },{ name: 'Salvage Provider' }];
 
   public isChecked(col) {
     return this.columns.find(c => {
