@@ -3,7 +3,7 @@
 
 <ng-template #content>
   <mat-card>
-    <button mat-raised-button color="accent" routerLink="/settings"><span>Please go back to settings to select a Branch!</span></button>
+    <button mat-raised-button color="accent" routerLink="/settings"><span>Please select a Branch!</span></button>
   </mat-card>
 </ng-template>
 
@@ -17,9 +17,9 @@
       <form>
 
         <agm-map [style.display]="isDivVisible ? 'none' : 'block'" [latitude]="branchLat" [longitude]="branchLng" [zoom]=9 [disableDefaultUI]=false [zoomControl]="true" [styles]="styles">
-          <agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOn(i);" [iconUrl]="'../assets/pin-unselected.svg'"></agm-marker>
-          <agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [label]="!toggle ? ' ' : {color: '#fff',fontSize: '10px',text: ((i + 1)).toString()}" (markerClick)="selMarkerOff(i);" [iconUrl]="!toggle ? '../assets/pin-selected.svg' : '../assets/pin-selected-route.svg'"></agm-marker>
-          <agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'../assets/branch.svg'"></agm-marker>
+          <agm-marker *ngFor="let stock of allStocks; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" (markerClick)="selMarkerOn(i);" [iconUrl]="'assets/pin-unselected.svg'"></agm-marker>
+          <agm-marker *ngFor="let stock of selected; let i = index" [latitude]="stock.lat" [longitude]="stock.lng" [label]="!toggle ? ' ' : {color: '#fff',fontSize: '10px',text: ((i + 1)).toString()}" (markerClick)="selMarkerOff(i);" [iconUrl]="!toggle ? 'assets/pin-selected.svg' : 'assets/pin-selected-route.svg'"></agm-marker>
+          <agm-marker [latitude]="branchLat" [longitude]="branchLng" [iconUrl]="'assets/branch.svg'"></agm-marker>
           <agm-circle [latitude]="branchLat" [longitude]="branchLng" [radius]="50000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false"></agm-circle>
         </agm-map>
 
